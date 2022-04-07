@@ -1,4 +1,4 @@
-package club.tonydon.util;
+package club.tonydon.utils;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -23,6 +23,8 @@ public class RedisUtils {
     private RedisTemplate<String, Object> objectTemplate;
 
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
 
 
     public void setObject(String key, Object object) {

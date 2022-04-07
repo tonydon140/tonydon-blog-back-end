@@ -27,27 +27,6 @@ public class FileController {
     @Resource
     private ObsClient obsClient;
 
-    @PostMapping("/upload")
-    public ResponseResult<Object> fileUpload(MultipartFile file) throws IOException {
-        // 1. 获取文件后缀名
-        String suffix = FileUtils.getSuffix(file);
-
-        // 2. 根据 UUID 生成文件名
-        String obsFilename = UUID.randomUUID().toString(true) + suffix;
-
-        // 3. 生成 objectKey
-        String objectKey = "img/test/" + obsFilename;
-        System.out.println(objectKey);
-
-        // 4. 上传文件
-        obsClient.putObject(ObsConsts.BUCKET_NAME, objectKey, file.getInputStream());
-
-        // 5. 返回文件上传后的访问地址
-        String url = ObsConsts.DOMAIN_NAME + objectKey;
-        return ResponseResult.success(url);
-    }
-
-
     /**
      * 上传图片
      *

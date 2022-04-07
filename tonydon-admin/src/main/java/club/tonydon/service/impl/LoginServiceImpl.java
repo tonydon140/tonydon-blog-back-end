@@ -8,7 +8,7 @@ import club.tonydon.domain.vo.LoginUserVo;
 import club.tonydon.domain.vo.UserInfoVo;
 import club.tonydon.service.LoginService;
 import club.tonydon.utils.BeanCopyUtils;
-import club.tonydon.util.RedisUtils;
+import club.tonydon.utils.RedisUtils;
 import cn.hutool.core.lang.UUID;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

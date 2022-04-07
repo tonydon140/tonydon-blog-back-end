@@ -5,7 +5,7 @@ import club.tonydon.contant.RedisConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.LoginUser;
 import club.tonydon.enums.HttpCodeEnum;
-import club.tonydon.util.RedisUtils;
+import club.tonydon.utils.RedisUtils;
 import club.tonydon.utils.WebUtils;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
