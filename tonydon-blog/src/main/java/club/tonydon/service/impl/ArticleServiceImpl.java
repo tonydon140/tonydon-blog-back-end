@@ -66,11 +66,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 获取文章列名
         List<Article> articleList = iPage.getRecords();
         // 查询 categoryName
-        // for循环查询
-//        for (Article article : articleList) {
-//            Category category = categoryService.getById(article.getCategoryId());
-//            article.setCategoryName(category.getName());
-//        }
         // stream流处理
         articleList = articleList.stream()
                 // 获取分类id，查询分类名称
