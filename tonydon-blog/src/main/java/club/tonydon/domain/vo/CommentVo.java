@@ -6,19 +6,12 @@ import java.util.Date;
 
 @Data
 public class CommentVo {
-    private Long id;
-    private String type;
-    //文章id
-    private Long articleId;
-    //评论内容
-    private String content;
-
-    private Date createTime;
-
-    // 评论用户名
-    private String name;
-    // 根评论 id
-    private Long rootId;
-    // 回复目标评论id
-    private Long toCommentId;
+    private Long id;                // 评论id
+    private String nickname;        // 用户昵称
+    private String avatar;          // 用户头像
+    private String email;           // 电子邮箱
+    private Long articleId;         // 所属文章id
+    private String replayNickname;  // 回复评论用户昵称
+    private String content;         // 评论内容
+    private Date createTime;        // 创建时间
 }

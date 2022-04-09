@@ -13,6 +13,7 @@ import club.tonydon.mapper.CommentMapper;
 import club.tonydon.service.CommentService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +27,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public ResponseResult<Object> saveComment(Comment comment) {
-
-        return null;
+        comment.setCreateTime(new Date());
+        save(comment);
+        return ResponseResult.success();
     }
 
     @Override
