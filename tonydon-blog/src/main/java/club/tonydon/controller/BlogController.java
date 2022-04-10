@@ -34,7 +34,7 @@ public class BlogController {
         if (bingImage == null) return ResponseResult.error();
 
         // 5. 获取 url，存入 Redis，并返回
-        url = "https://www.bing.com/" +  bingImage.getImages().get(0).getUrl();
+        url = "https://www.bing.com" +  bingImage.getImages().get(0).getUrl();
         redisUtils.setValue(key, url, RedisConsts.BING_IMAGE_TTL);
         return ResponseResult.success(url);
     }

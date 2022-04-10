@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 评论表(Comment)表服务实现类
@@ -41,9 +42,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 2. 分页查询
         IPage<Comment> iPage = new Page<>(pageNum, pageSize);
         page(iPage, wrapper);
-
-        // 3. 封装数据返回结果
         List<Comment> commentList = iPage.getRecords();
+
+        // 3. 补全回复评论的昵称
+        commentList = commentList.stream().peek(comment -> {
+            if(comment.getReplyId() != -1)
+                comment.setReplyNickname(getById(comment.getReplyId()).getNickname());
+        }).collect(Collectors.toList());
+
+        // 4. 封装成 vo 并返回
         List<CommentVo> voList = BeanCopyUtils.copyBeanList(commentList, CommentVo.class);
         return ResponseResult.success(new PageVo<>(voList, iPage.getTotal()));
     }
