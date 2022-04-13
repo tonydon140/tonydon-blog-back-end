@@ -19,12 +19,12 @@ public class SysContants {
     /**
      * 友链审核通过
      */
-    public static final String LINK_STATUS_NORMAL = "0";
+    public static final String LINK_STATUS_NORMAL = "1";
 
     /**
      * 友链审核未通过
      */
-    public static final String LINK_STATUS_NOT_PASS = "1";
+    public static final String LINK_STATUS_NOT_PASS = "0";
 
     /**
      * 友链未审核
