@@ -4,8 +4,8 @@ import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Category;
 import club.tonydon.domain.vo.CategoryVo;
 import club.tonydon.mapper.CategoryMapper;
+import club.tonydon.mapper.UserMapper;
 import club.tonydon.service.CategoryService;
-import club.tonydon.service.UserService;
 import club.tonydon.utils.BeanCopyUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
     @Resource
-    private UserService userService;
+    private UserMapper userMapper;
 
     @Override
     public ResponseResult<List<CategoryVo>> getAll() {
@@ -28,9 +28,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         categoryList = categoryList.stream()
                 .peek(category -> {
                     if (category.getCreateBy() != null)
-                        category.setCreateUsername(userService.getById(category.getCreateBy()).getUsername());
+                        category.setCreateUsername(userMapper.selectById(category.getCreateBy()).getUsername());
                     if (category.getUpdateBy() != null)
-                        category.setUpdateUsername(userService.getById(category.getUpdateBy()).getUsername());
+                        category.setUpdateUsername(userMapper.selectById(category.getUpdateBy()).getUsername());
                     if (category.getPid() != -1)
                         category.setPName(getById(category.getPid()).getName());
                 }).collect(Collectors.toList());

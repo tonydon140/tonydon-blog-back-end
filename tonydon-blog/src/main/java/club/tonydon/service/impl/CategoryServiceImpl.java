@@ -5,6 +5,7 @@ import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
 import club.tonydon.domain.entity.Category;
 import club.tonydon.domain.vo.CategoryVo;
+import club.tonydon.mapper.ArticleMapper;
 import club.tonydon.mapper.CategoryMapper;
 import club.tonydon.service.ArticleService;
 import club.tonydon.service.CategoryService;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
     @Resource
-    private ArticleService articleService;
+    private ArticleMapper articleMapper;
 
     /**
      * 获取分类列表，用于前台展示
@@ -39,7 +40,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         // 查询文章表，状态为已发布的文章
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Article::getStatus, SysContants.ARTICLE_STATUS_NORMAL);
-        List<Article> articleList = articleService.list(wrapper);
+        List<Article> articleList = articleMapper.selectList(wrapper);
 
         // 获取文章的分类id，并且去重
         Set<Long> categoryIds = articleList.stream()

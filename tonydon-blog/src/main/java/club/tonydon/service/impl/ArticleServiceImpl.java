@@ -9,6 +9,7 @@ import club.tonydon.domain.vo.ArticleVo;
 import club.tonydon.domain.vo.HotArticleVo;
 import club.tonydon.domain.vo.PageVo;
 import club.tonydon.mapper.ArticleMapper;
+import club.tonydon.mapper.CategoryMapper;
 import club.tonydon.service.ArticleService;
 import club.tonydon.service.CategoryService;
 import club.tonydon.utils.BeanCopyUtils;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     @Resource
-    private CategoryService categoryService;
+    private CategoryMapper categoryMapper;
 
     // 查询热门文章
     @Override
@@ -69,7 +70,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // stream流处理
         articleList = articleList.stream()
                 // 获取分类id，查询分类名称
-                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .map(article -> article.setCategoryName(categoryMapper.selectById(article.getCategoryId()).getName()))
                 .collect(Collectors.toList());
 
         // 封装数据
@@ -87,7 +88,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 封装vo
         ArticleDetailVo vo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         // 根据分类id，查询分类名称
-        Category category = categoryService.getById(vo.getCategoryId());
+        Category category = categoryMapper.selectById(vo.getCategoryId());
         if (category != null) {
             vo.setCategoryName(category.getName());
         }

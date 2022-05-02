@@ -3,16 +3,17 @@ package club.tonydon.utils;
 import club.tonydon.domain.entity.Hour;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 public class DateUtils {
 
     public static String getToday(){
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        return format.format(new Date());
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return now.format(formatter);
     }
 
     /**
@@ -20,13 +21,13 @@ public class DateUtils {
      * @return hour 实例
      */
     public static Hour getHour(){
-        SimpleDateFormat format = new SimpleDateFormat("MM-dd-HH");
-        Calendar calendar = new GregorianCalendar();
-
         Hour hour = new Hour();
-        hour.setNow(format.format(calendar.getTime()));
-        calendar.add(Calendar.HOUR_OF_DAY, -1);
-        hour.setLast(format.format(calendar.getTime()));
+        LocalDateTime now = LocalDateTime.now();    // 当前时间
+        LocalDateTime last = now.plusHours(-1);     // 前一个小时时间
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-HH");
+        hour.setNow(now.format(formatter));
+        hour.setLast(last.format(formatter));
 
         return hour;
     }

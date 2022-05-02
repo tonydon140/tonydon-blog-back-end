@@ -30,6 +30,9 @@ public class Comment {
     private Integer delFlag;
 
     @TableField(exist = false)
-    private String replyNickname;  // 回复评论用户昵称
+    private String replyNickname;   // 回复评论用户昵称
+
+    @TableField(exist = false)
+    private String articleTitle;    // 回复文章标题
 }
 
