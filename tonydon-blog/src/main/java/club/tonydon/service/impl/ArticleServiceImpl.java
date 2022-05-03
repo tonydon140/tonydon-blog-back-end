@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.contant.SysContants;
+import club.tonydon.contant.SysConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
 import club.tonydon.domain.entity.Category;
@@ -11,12 +11,9 @@ import club.tonydon.domain.vo.PageVo;
 import club.tonydon.mapper.ArticleMapper;
 import club.tonydon.mapper.CategoryMapper;
 import club.tonydon.service.ArticleService;
-import club.tonydon.service.CategoryService;
 import club.tonydon.utils.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -36,7 +33,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult<List<HotArticleVo>> hotArticleList() {
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         // 必须是正式文章
-        wrapper.eq(Article::getStatus, SysContants.ARTICLE_STATUS_NORMAL);
+        wrapper.eq(Article::getIsPublish, SysConsts.ARTICLE_STATUS_PUBLISH);
         // 安装浏览量进行排序
         wrapper.orderByDesc(Article::getViewCount);
         // 最多查 10 项
@@ -58,7 +55,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 如果有 categoryId，查询时要和传入的相同
         wrapper.eq(categoryId != null && categoryId > 0, Article::getCategoryId, categoryId);
         // 正式发布的文章
-        wrapper.eq(Article::getStatus, SysContants.ARTICLE_STATUS_NORMAL);
+        wrapper.eq(Article::getIsPublish, SysConsts.ARTICLE_STATUS_PUBLISH);
         // 置顶的文章在前，对 isTop 进行降序排序
         wrapper.orderByDesc(Article::getIsTop);
         // 分页查询

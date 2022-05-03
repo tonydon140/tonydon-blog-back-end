@@ -1,9 +1,11 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.contant.SysContants;
+import club.tonydon.contant.SysConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
+import club.tonydon.domain.vo.ArticleEditVo;
 import club.tonydon.domain.vo.ArticleListVo;
+import club.tonydon.exception.NoIdException;
 import club.tonydon.mapper.ArticleMapper;
 import club.tonydon.mapper.CategoryMapper;
 import club.tonydon.mapper.UserMapper;
@@ -28,30 +30,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
 
     @Override
-    public ResponseResult<Object> saveArticle(Article article) {
-        return null;
+    public ResponseResult<Object> publishNew(Article article) {
+        // 设置更新时间、更新人、发布时间、状态
+        article.setUpdateTime(new Date());
+        article.setPublishTime(new Date());
+        article.setUpdateBy(article.getPublishBy());
+        article.setIsPublish(SysConsts.ARTICLE_STATUS_PUBLISH);
+        // 保存文章
+        save(article);
+        return ResponseResult.success();
     }
 
-    /**
-     * 发布文章
-     *
-     * @param article 文章
-     * @return 响应数据
-     */
     @Override
-    public ResponseResult<Object> publish(Article article) {
-        // 1. 根据 id 是否存在判断文章是否是新文章
-        Long id = article.getId();
-        if (id == null) {
-            // 2. 写文章
-            article.setStatus(SysContants.ARTICLE_STATUS_NORMAL);
-        }
-        return null;
+    public ResponseResult<Object> publishDraft(Article article) {
+        // 设置更新时间、更新人、发布时间、状态
+        article.setUpdateTime(new Date());
+        article.setPublishTime(new Date());
+        article.setUpdateBy(article.getPublishBy());
+        article.setIsPublish(SysConsts.ARTICLE_STATUS_PUBLISH);
+        // 更新文章
+        updateById(article);
+        return ResponseResult.success();
     }
+
+
 
     @Override
     public ResponseResult<Object> updateDraft(Article article) {
-        return null;
+        // 设置更新时间
+        article.setUpdateTime(new Date());
+        updateById(article);
+        return ResponseResult.success();
     }
 
     /**
@@ -61,13 +70,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return 文章信息
      */
     @Override
-    public ResponseResult<Object> saveNewDraft(Article article) {
-        // 1. 设置创建时间
-        article.setCreateTime(new Date());
-        // 2. 保存文章草稿
-        boolean save = save(article);
-        System.out.println(article.getId());
-        return ResponseResult.success(save);
+    public ResponseResult<Object> saveDraft(Article article) {
+        // 设置更新时间
+        article.setUpdateTime(new Date());
+        // 保存文章草稿
+        save(article);
+        return ResponseResult.success();
+    }
+
+    @Override
+    public ResponseResult<Object> updateArticle(Article article) {
+        // 设置更新时间
+        article.setUpdateTime(new Date());
+        // 更新文章
+        updateById(article);
+        return ResponseResult.success();
     }
 
     @Override
@@ -78,9 +95,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 2. 对文章进行处理
         articleList = articleList.stream().peek(article -> {
             article.setCategoryName(categoryMapper.selectById(article.getCategoryId()).getName());
-            if(article.getCreateBy() != null)
-                article.setCreateName(userMapper.selectById(article.getCreateBy()).getUsername());
-            if(article.getUpdateBy() != null)
+            if (article.getPublishBy() != null)
+                article.setPublishName(userMapper.selectById(article.getPublishBy()).getUsername());
+            if (article.getUpdateBy() != null)
                 article.setUpdateName(userMapper.selectById(article.getUpdateBy()).getUsername());
         }).collect(Collectors.toList());
 
@@ -88,6 +105,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 3. 封装为 vo 对象并返回
         List<ArticleListVo> voList = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
         return ResponseResult.success(voList);
+    }
+
+    @Override
+    public ResponseResult<ArticleEditVo> getArticleDetailById(Long id) {
+        Article article = getById(id);
+        if (article == null) throw new NoIdException();
+
+        // 填充数据
+        article.setCategoryName(categoryMapper.selectById(article.getCategoryId()).getName());
+        if (article.getPublishBy() != null)
+            article.setPublishName(userMapper.selectById(article.getPublishBy()).getUsername());
+        if (article.getUpdateBy() != null)
+            article.setUpdateName(userMapper.selectById(article.getUpdateBy()).getUsername());
+
+        // 封装 vo 对象并返回
+        ArticleEditVo vo = BeanCopyUtils.copyBean(article, ArticleEditVo.class);
+        return ResponseResult.success(vo);
     }
 
 }

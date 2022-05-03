@@ -19,16 +19,20 @@ public class ArticleController {
     private ArticleService articleService;
 
     // 获取热门文章
-    @GetMapping("/hotArticleList")
+    @GetMapping("/hot")
     public ResponseResult<List<HotArticleVo>> hotArticleList() {
         return articleService.hotArticleList();
     }
 
+
     // 获取文章列表
-    @GetMapping("/articleList")
-    public ResponseResult<PageVo<ArticleVo>> articleList(Integer pageNum, Integer pageSize, Long categoryId) {
+    @GetMapping("/{pageNum}/{pageSize}/{categoryId}")
+    public ResponseResult<PageVo<ArticleVo>> articleList(@PathVariable Integer pageNum,
+                                                         @PathVariable Integer pageSize,
+                                                         @PathVariable Long categoryId) {
         return articleService.articleList(pageNum, pageSize, categoryId);
     }
+
 
     // 根据文章id获取文章内容
     @GetMapping("/{id}")

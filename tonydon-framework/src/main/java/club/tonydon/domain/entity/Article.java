@@ -27,50 +27,35 @@ public class Article {
 
     @TableId(type = IdType.AUTO)
     private Long id;
-    //标题
-    private String title;
-    //文章内容
-    private String content;
-    //文章摘要
-    private String summary;
-    //所属分类id
-    private Long categoryId;
 
-    @TableField(exist = false)
-    private String categoryName;    // 分类名称
+    private String title;       //标题
+    private String content;     // 文章内容
+    private String summary;     // 文章摘要
+    private Long categoryId;    // 所属分类id
+    private String thumbnail;   // 缩略图
+    private Long viewCount;     // 访问量
 
-    //缩略图
-    private String thumbnail;
-    //是否置顶（0否，1是）
-    private String isTop;
-    //状态（0已发布，1草稿）
-    private String status;
-    //访问量
-    private Long viewCount;
-    //是否允许评论 1是，0否
-    private String isComment;
+    private String isTop;       // 是否置顶（0否，1是）
+    private String isPublish;   // 是否发布（0草稿，1草稿）
+    private String isComment;   // 是否允许评论（0禁止，1允许）
     
-    private Long createBy;
+    private Long publishBy;     // 发布人id
+    private Date publishTime;   // 发布时间
+    private Long updateBy;      // 更新人id
+    private Date updateTime;    // 更新时间
 
-    // 创建人名称
+    private Integer delFlag;    // 删除标志（0代表未删除，1代表已删除）
+
+    // 分类名称
     @TableField(exist = false)
-    private String createName;
-
-    // 创建时间
-    private Date createTime;
-
-    // 更新人 id
-    private Long updateBy;
+    private String categoryName;
 
     // 更新人名称
     @TableField(exist = false)
     private String updateName;
 
-    // 更新时间
-    private Date updateTime;
-
-    //删除标志（0代表未删除，1代表已删除）
-    private Integer delFlag;
-
+    // 发布人名称
+    @TableField(exist = false)
+    private String publishName;
 }
 

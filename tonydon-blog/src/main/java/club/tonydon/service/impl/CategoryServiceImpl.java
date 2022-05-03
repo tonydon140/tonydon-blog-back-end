@@ -1,13 +1,12 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.contant.SysContants;
+import club.tonydon.contant.SysConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
 import club.tonydon.domain.entity.Category;
 import club.tonydon.domain.vo.CategoryVo;
 import club.tonydon.mapper.ArticleMapper;
 import club.tonydon.mapper.CategoryMapper;
-import club.tonydon.service.ArticleService;
 import club.tonydon.service.CategoryService;
 import club.tonydon.utils.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -39,8 +38,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public ResponseResult<List<CategoryVo>> getAll() {
         // 查询文章表，状态为已发布的文章
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Article::getStatus, SysContants.ARTICLE_STATUS_NORMAL);
+        wrapper.eq(Article::getIsPublish, SysConsts.ARTICLE_STATUS_PUBLISH);
         List<Article> articleList = articleMapper.selectList(wrapper);
+        if (articleList.size() == 0)  return ResponseResult.success(null);
 
         // 获取文章的分类id，并且去重
         Set<Long> categoryIds = articleList.stream()
@@ -50,7 +50,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         // 查询分类表，必须是正常的分类，且分类必须有文章存在
         LambdaQueryWrapper<Category> categoryWrapper = new LambdaQueryWrapper<>();
         categoryWrapper
-                .eq(Category::getStatus, SysContants.CATEGORY_STATUS_NORMAL)
+                .eq(Category::getStatus, SysConsts.CATEGORY_STATUS_NORMAL)
                 .in(Category::getId, categoryIds);
         List<Category> categoryList = list(categoryWrapper);
 

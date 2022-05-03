@@ -35,6 +35,9 @@ public class OBSTest {
         for (Article article : list) {
             System.out.println(article.getCategoryId());
         }
+
+        Article article = new Article();
+
     }
 
 }

@@ -1,15 +1,15 @@
 package club.tonydon.contant;
 
-public class SysContants {
+public class SysConsts {
     /**
      * 文章草稿
      */
-    public static final String ARTICLE_STATUS_DRAFT = "1";
+    public static final String ARTICLE_STATUS_DRAFT = "0";
 
     /**
      * 已发布文章
      */
-    public static final String ARTICLE_STATUS_NORMAL = "0";
+    public static final String ARTICLE_STATUS_PUBLISH = "1";
 
     /**
      * 分类正常

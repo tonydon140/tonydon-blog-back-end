@@ -1,24 +1,26 @@
-CREATE TABLE `td_article`
+# 文章表
+create table td_article
 (
-    `id`          bigint NOT NULL AUTO_INCREMENT,
-    `title`       varchar(256)  DEFAULT NULL COMMENT '标题',
-    `content`     longtext COMMENT '文章内容',
-    `summary`     varchar(1024) DEFAULT NULL COMMENT '文章摘要',
-    `category_id` bigint        DEFAULT NULL COMMENT '所属分类id',
-    `thumbnail`   varchar(256)  DEFAULT NULL COMMENT '缩略图',
-    `is_top`      char(1)       DEFAULT '0' COMMENT '是否置顶（0否，1是）',
-    `status`      char(1)       DEFAULT '1' COMMENT '状态（0已发布，1草稿）',
-    `view_count`  bigint        DEFAULT '0' COMMENT '访问量',
-    `is_comment`  char(1)       DEFAULT '1' COMMENT '是否允许评论 1是，0否',
-    `create_by`   bigint        DEFAULT NULL,
-    `create_time` datetime      DEFAULT NULL,
-    `update_by`   bigint        DEFAULT NULL,
-    `update_time` datetime      DEFAULT NULL,
-    `del_flag`    int           DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
-    PRIMARY KEY (`id`)
+    id           bigint auto_increment primary key,
+    title        varchar(256)  default null comment '标题',
+    content      longtext COMMENT '文章内容',
+    summary      varchar(1024) default null comment '文章摘要',
+    category_id  bigint        default null comment '所属分类id',
+    thumbnail    varchar(256)  default null comment '缩略图',
+    view_count   bigint        default '0' comment '访问量',
+    is_top       char(1)       default '0' comment '是否置顶（0否，1是）',
+    is_publish   char(1)       default '0' comment '是否发布（0草稿，1已发布）',
+    is_comment   char(1)       default '1' comment '是否允许评论（0禁止，1允许）',
+    publish_by   bigint        default null comment '发布人id',
+    publish_time datetime      default null comment '发布事件',
+    update_by    bigint        default null comment '更新人时间',
+    update_time  datetime      default null comment '更新时间',
+    del_flag     int           default '0' comment '删除标志（0代表未删除，1代表已删除）'
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='文章表';
 
+# drop table td_comment;
+# drop table td_article;
 
 # 创建分类表
 CREATE TABLE `td_category`
@@ -43,7 +45,7 @@ values (1, '未分类', -1, '未分类', '0', NULL, NULL, NULL, NULL, 0);
 
 
 # 友链表
-create table `td_friends_link`
+create table td_friends_link
 (
     id          bigint not null auto_increment primary key,
     name        varchar(128) default null,
