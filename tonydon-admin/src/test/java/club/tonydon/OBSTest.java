@@ -21,23 +21,11 @@ import java.util.List;
 public class OBSTest {
 
     @Resource
-    private UserMapper userMapper;
-
-    @Resource
-    private CategoryMapper categoryMapper;
-
-    @Resource
-    private ArticleService articleService;
+    ObsClient obsClient;
 
     @Test
     public void test() throws IOException {
-        List<Article> list = articleService.list();
-        for (Article article : list) {
-            System.out.println(article.getCategoryId());
-        }
-
-        Article article = new Article();
-
+        System.out.println(obsClient);
     }
 
 }

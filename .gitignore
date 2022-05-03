@@ -1,4 +1,6 @@
 */target
+/tonydon-admin/src/main/resources/obs.yml
+/tonydon-blog/src/main/resources/pexels.yml
 
 # 编辑器文件
 .idea

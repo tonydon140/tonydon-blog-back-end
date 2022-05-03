@@ -51,7 +51,6 @@ public class FileController {
 
         // 5. 返回文件上传后的访问地址
         return ResponseResult.success(ObsConsts.DOMAIN_NAME + objectKey);
-//        return ResponseResult.success("https://tonydon-blog.obs.cn-east-3.myhuaweicloud.com/img/2022/4/1/0f672256b92740d6902362671d8641a9.png");
     }
 
 

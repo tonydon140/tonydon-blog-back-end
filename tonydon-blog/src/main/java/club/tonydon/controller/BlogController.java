@@ -1,6 +1,6 @@
 package club.tonydon.controller;
 
-import club.tonydon.contant.PexelsConsts;
+import club.tonydon.constant.PexelsConsts;
 import club.tonydon.contant.RedisConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Hour;
@@ -15,9 +15,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.yaml.snakeyaml.Yaml;
 
 
 import javax.annotation.Resource;
+import java.io.InputStream;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -26,6 +29,7 @@ public class BlogController {
     @Resource
     private RedisUtils redisUtils;
 
+    private String API_VALUE;
 
     @GetMapping("/pexels-img")
     public ResponseResult<Object> getPexelsImage() {
@@ -49,9 +53,17 @@ public class BlogController {
     }
 
     private void requestImage(String key){
+        // 加载 pexels.yml 读取 API_VALUE 的值
+        if (API_VALUE == null){
+            Yaml yaml = new Yaml();
+            InputStream stream = getClass().getClassLoader().getResourceAsStream("pexels.yml");
+            Map<String, String> map = yaml.load(stream);
+            API_VALUE = map.get("value");
+        }
+
         // 1. 封装请求头
         HttpHeaders headers = new HttpHeaders();
-        headers.add(PexelsConsts.API_KEY, PexelsConsts.API_VALUE);
+        headers.add(PexelsConsts.API_KEY, API_VALUE);
         headers.add("user-agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36");
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
