@@ -1,13 +1,11 @@
 package club.tonydon.controller;
 
-import club.tonydon.contant.ObsConsts;
+import club.tonydon.constant.ObsConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.enums.HttpCodeEnum;
-import club.tonydon.exception.SystemException;
 import club.tonydon.util.FileUtils;
 import club.tonydon.util.ObsUtils;
 import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.StrUtil;
 import com.obs.services.ObsClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 @RestController
 @RequestMapping("/upload")

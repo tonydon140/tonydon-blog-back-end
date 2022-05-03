@@ -1,4 +1,4 @@
-package club.tonydon.contant;
+package club.tonydon.constant;
 
 public class ObsConsts {
     public static final String END_POINT = "obs.cn-east-3.myhuaweicloud.com";

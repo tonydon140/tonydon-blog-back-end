@@ -1,7 +1,7 @@
 package club.tonydon.controller;
 
 import club.tonydon.constant.PexelsConsts;
-import club.tonydon.contant.RedisConsts;
+import club.tonydon.constant.RedisConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Hour;
 import club.tonydon.domain.entity.Image;

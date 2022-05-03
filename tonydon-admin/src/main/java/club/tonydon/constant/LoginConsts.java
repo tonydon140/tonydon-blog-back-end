@@ -1,4 +1,4 @@
-package club.tonydon.contant;
+package club.tonydon.constant;
 
 public class LoginConsts {
     public static final String TOKEN_KEY = "token";

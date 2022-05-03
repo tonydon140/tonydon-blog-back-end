@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.contant.SysConsts;
+import club.tonydon.constant.SysConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
 import club.tonydon.domain.entity.Category;

@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.contant.RedisConsts;
+import club.tonydon.constant.RedisConsts;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.User;
 import club.tonydon.domain.entity.LoginUser;

@@ -1,4 +1,4 @@
-package club.tonydon.contant;
+package club.tonydon.constant;
 
 public class SysConsts {
     /**

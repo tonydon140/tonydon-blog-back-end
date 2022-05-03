@@ -1,6 +1,6 @@
 package club.tonydon.config;
 
-import club.tonydon.contant.ObsConsts;
+import club.tonydon.constant.ObsConsts;
 import com.obs.services.ObsClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
