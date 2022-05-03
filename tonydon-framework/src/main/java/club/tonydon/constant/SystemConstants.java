@@ -1,6 +1,6 @@
 package club.tonydon.constant;
 
-public class SysConsts {
+public class SystemConstants {
     /**
      * 文章草稿
      */

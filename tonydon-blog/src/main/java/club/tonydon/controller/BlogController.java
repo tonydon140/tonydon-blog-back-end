@@ -1,7 +1,7 @@
 package club.tonydon.controller;
 
-import club.tonydon.constant.PexelsConsts;
-import club.tonydon.constant.RedisConsts;
+import club.tonydon.constant.PexelsConstants;
+import club.tonydon.constant.RedisConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Hour;
 import club.tonydon.domain.entity.Image;
@@ -35,21 +35,21 @@ public class BlogController {
     public ResponseResult<Object> getPexelsImage() {
         // 1. 获取当前小时的 key
         Hour hour = DateUtils.getHour();
-        String nowKey = RedisConsts.PEXELS_IMAGE_PREFIX + hour.getNow();
+        String nowKey = RedisConstants.PEXELS_IMAGE_PREFIX + hour.getNow();
 
         // 2. 从 redis 中获取，如果存在直接返回
         String url = redisUtils.getValue(nowKey);
         if (url != null) return ResponseResult.success(url);
 
         // 3. redis 中不存在，查找上一个小时的图片
-        String lastKey = RedisConsts.PEXELS_IMAGE_PREFIX + hour.getLast();
+        String lastKey = RedisConstants.PEXELS_IMAGE_PREFIX + hour.getLast();
         url = redisUtils.getValue(lastKey);
 
         // 4. 使用新的线程记录当前小时的图片
         new Thread(()->requestImage(nowKey)).start();
 
         // 5. 返回
-        return ResponseResult.success(url == null ? PexelsConsts.DEFAULT_URL : url);
+        return ResponseResult.success(url == null ? PexelsConstants.DEFAULT_URL : url);
     }
 
     private void requestImage(String key){
@@ -63,21 +63,21 @@ public class BlogController {
 
         // 1. 封装请求头
         HttpHeaders headers = new HttpHeaders();
-        headers.add(PexelsConsts.API_KEY, API_VALUE);
+        headers.add(PexelsConstants.API_KEY, API_VALUE);
         headers.add("user-agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36");
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
 
         // 2. 封装 url，请求数据
-        String url = PexelsConsts.API + "&page=" + new Random().nextInt(8000);
+        String url = PexelsConstants.API + "&page=" + new Random().nextInt(8000);
         Image image = restTemplate.exchange(url, HttpMethod.GET, httpEntity, Image.class).getBody();
 
         // 3. 判断 image 是否为空
         if(image == null) throw new SystemException(HttpCodeEnum.SYSTEM_ERROR);
-        String imageUrl = image.getPhotos().get(0).getSrc().getOriginal() + PexelsConsts.URL_SUFFIX;
+        String imageUrl = image.getPhotos().get(0).getSrc().getOriginal() + PexelsConstants.URL_SUFFIX;
 
         // 4. 存入 redis 中
-        redisUtils.setValue(key, imageUrl, RedisConsts.PEXELS_IMAGE_TTL);
+        redisUtils.setValue(key, imageUrl, RedisConstants.PEXELS_IMAGE_TTL);
     }
 }

@@ -1,6 +1,6 @@
 package club.tonydon.config;
 
-import club.tonydon.constant.ObsConsts;
+import club.tonydon.constant.ObsConstants;
 import com.obs.services.ObsClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +21,6 @@ public class ObsConfig {
         Yaml yaml = new Yaml();
         InputStream stream = getClass().getClassLoader().getResourceAsStream("obs.yml");
         Map<String, String> map = yaml.load(stream);
-        return new ObsClient(map.get("ak"), map.get("sk"), ObsConsts.END_POINT);
+        return new ObsClient(map.get("ak"), map.get("sk"), ObsConstants.END_POINT);
     }
 }

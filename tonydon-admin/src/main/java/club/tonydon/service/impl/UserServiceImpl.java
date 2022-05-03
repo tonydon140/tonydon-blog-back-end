@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.constant.SysConsts;
+import club.tonydon.constant.SystemConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.LoginUser;
 import club.tonydon.domain.vo.UserInfoVo;
@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public ResponseResult<List<UserInfoVo>> getAll() {
         // 1. 查询状态正常的用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getStatus, SysConsts.USER_STATUS_NORMAL);
+        wrapper.eq(User::getStatus, SystemConstants.USER_STATUS_NORMAL);
         List<User> list = list(wrapper);
         // 2. 转换为 vo 并返回
         List<UserInfoVo> voList = BeanCopyUtils.copyBeanList(list, UserInfoVo.class);
@@ -60,14 +60,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public ResponseResult<Object> removeById(Long id) {
         // 1. 查询正常用户的数量
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getStatus, SysConsts.USER_STATUS_NORMAL);
+        wrapper.eq(User::getStatus, SystemConstants.USER_STATUS_NORMAL);
         Long count = userMapper.selectCount(wrapper);
         // 2. 判断数量是否等于 1
         if (count == 1){
             return ResponseResult.error(HttpCodeEnum.ONLY_ONE_USER_ERROR);
         }
         // 3. 进行删除用户
-        boolean update = lambdaUpdate().eq(User::getId, id).set(User::getDelFlag, SysConsts.DEL_DELETED).update();
+        boolean update = lambdaUpdate().eq(User::getId, id).set(User::getDelFlag, SystemConstants.DEL_DELETED).update();
         if(update){
             return ResponseResult.success();
         }else{

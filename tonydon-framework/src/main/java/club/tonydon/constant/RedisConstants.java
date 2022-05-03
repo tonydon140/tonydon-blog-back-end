@@ -1,6 +1,6 @@
 package club.tonydon.constant;
 
-public class RedisConsts {
+public class RedisConstants {
     /**
      * 登陆前缀
      */

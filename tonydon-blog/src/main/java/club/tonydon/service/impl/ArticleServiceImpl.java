@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.constant.SysConsts;
+import club.tonydon.constant.SystemConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
 import club.tonydon.domain.entity.Category;
@@ -33,7 +33,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult<List<HotArticleVo>> hotArticleList() {
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         // 必须是正式文章
-        wrapper.eq(Article::getIsPublish, SysConsts.ARTICLE_STATUS_PUBLISH);
+        wrapper.eq(Article::getIsPublish, SystemConstants.ARTICLE_STATUS_PUBLISH);
         // 安装浏览量进行排序
         wrapper.orderByDesc(Article::getViewCount);
         // 最多查 10 项
@@ -55,7 +55,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 如果有 categoryId，查询时要和传入的相同
         wrapper.eq(categoryId != null && categoryId > 0, Article::getCategoryId, categoryId);
         // 正式发布的文章
-        wrapper.eq(Article::getIsPublish, SysConsts.ARTICLE_STATUS_PUBLISH);
+        wrapper.eq(Article::getIsPublish, SystemConstants.ARTICLE_STATUS_PUBLISH);
         // 置顶的文章在前，对 isTop 进行降序排序
         wrapper.orderByDesc(Article::getIsTop);
         // 分页查询

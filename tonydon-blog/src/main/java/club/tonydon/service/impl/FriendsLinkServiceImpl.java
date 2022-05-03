@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.constant.SysConsts;
+import club.tonydon.constant.SystemConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.FriendsLink;
 import club.tonydon.domain.vo.FriendsLinkVo;
@@ -28,7 +28,7 @@ public class FriendsLinkServiceImpl extends ServiceImpl<FriendsMapper, FriendsLi
     public ResponseResult<List<FriendsLinkVo>> getAllLink() {
         // 查询已经通过的友链
         LambdaQueryWrapper<FriendsLink> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(FriendsLink::getStatus, SysConsts.LINK_STATUS_NORMAL);
+        wrapper.eq(FriendsLink::getStatus, SystemConstants.LINK_STATUS_NORMAL);
 
         // 查询结果
         List<FriendsLink> linkList = list(wrapper);

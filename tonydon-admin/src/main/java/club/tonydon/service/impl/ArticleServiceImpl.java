@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.constant.SysConsts;
+import club.tonydon.constant.SystemConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Article;
 import club.tonydon.domain.vo.ArticleEditVo;
@@ -35,7 +35,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         article.setUpdateTime(new Date());
         article.setPublishTime(new Date());
         article.setUpdateBy(article.getPublishBy());
-        article.setIsPublish(SysConsts.ARTICLE_STATUS_PUBLISH);
+        article.setIsPublish(SystemConstants.ARTICLE_STATUS_PUBLISH);
         // 保存文章
         save(article);
         return ResponseResult.success();
@@ -47,7 +47,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         article.setUpdateTime(new Date());
         article.setPublishTime(new Date());
         article.setUpdateBy(article.getPublishBy());
-        article.setIsPublish(SysConsts.ARTICLE_STATUS_PUBLISH);
+        article.setIsPublish(SystemConstants.ARTICLE_STATUS_PUBLISH);
         // 更新文章
         updateById(article);
         return ResponseResult.success();

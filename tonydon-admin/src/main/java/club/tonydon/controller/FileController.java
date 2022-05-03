@@ -1,6 +1,6 @@
 package club.tonydon.controller;
 
-import club.tonydon.constant.ObsConsts;
+import club.tonydon.constant.ObsConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.enums.HttpCodeEnum;
 import club.tonydon.util.FileUtils;
@@ -42,10 +42,10 @@ public class FileController {
         String objectKey = ObsUtils.getImageKeyPrefix() + obsFilename;
 
         // 4. 上传文件
-        obsClient.putObject(ObsConsts.BUCKET_NAME, objectKey, file.getInputStream());
+        obsClient.putObject(ObsConstants.BUCKET_NAME, objectKey, file.getInputStream());
 
         // 5. 返回文件上传后的访问地址
-        return ResponseResult.success(ObsConsts.DOMAIN_NAME + objectKey);
+        return ResponseResult.success(ObsConstants.DOMAIN_NAME + objectKey);
     }
 
 

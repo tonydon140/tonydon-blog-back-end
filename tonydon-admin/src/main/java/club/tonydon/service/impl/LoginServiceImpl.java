@@ -1,6 +1,6 @@
 package club.tonydon.service.impl;
 
-import club.tonydon.constant.RedisConsts;
+import club.tonydon.constant.RedisConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.User;
 import club.tonydon.domain.entity.LoginUser;
@@ -47,8 +47,8 @@ public class LoginServiceImpl implements LoginService {
         loginUser.setToken(token);
 
         // 4. 将用户消息存入 redis，使用 token 作为 key
-        String key = RedisConsts.LOGIN_PREFIX + token;
-        redisUtils.setObject(key, loginUser, RedisConsts.LOGIN_TTL);
+        String key = RedisConstants.LOGIN_PREFIX + token;
+        redisUtils.setObject(key, loginUser, RedisConstants.LOGIN_TTL);
 
         // 5. 把 token 和用户消息进行封装，并返回
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
@@ -66,7 +66,7 @@ public class LoginServiceImpl implements LoginService {
         String token = loginUser.getToken();
 
         // 3. 从 Redis 中删除用户
-        redisUtils.removeObject(RedisConsts.LOGIN_PREFIX + token);
+        redisUtils.removeObject(RedisConstants.LOGIN_PREFIX + token);
         return ResponseResult.success();
     }
 }

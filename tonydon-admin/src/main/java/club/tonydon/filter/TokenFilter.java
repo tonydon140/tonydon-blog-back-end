@@ -1,7 +1,7 @@
 package club.tonydon.filter;
 
-import club.tonydon.constant.LoginConsts;
-import club.tonydon.constant.RedisConsts;
+import club.tonydon.constant.LoginConstants;
+import club.tonydon.constant.RedisConstants;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.LoginUser;
 import club.tonydon.enums.HttpCodeEnum;
@@ -32,12 +32,12 @@ public class TokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         // 1. 获取请求头中的 token
-        String token = request.getHeader(LoginConsts.TOKEN_KEY);
+        String token = request.getHeader(LoginConstants.TOKEN_KEY);
 
         // 2. 判断 token 是否为空
         if (StrUtil.isBlank(token)) {
             // 如果是请求登陆，直接放行
-            if(LoginConsts.LOGIN_PATH.equals(request.getServletPath())){
+            if(LoginConstants.LOGIN_PATH.equals(request.getServletPath())){
                 filterChain.doFilter(request,response);
             }
             // 非请求登陆，直接拒绝访问
@@ -46,7 +46,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
 
         // 3. 根据 token 从 Redis 中查询用户信息
-        String key = RedisConsts.LOGIN_PREFIX + token;
+        String key = RedisConstants.LOGIN_PREFIX + token;
         LoginUser userDetails = (LoginUser) redisUtils.getObject(key);
         // 用户不存在，登陆过期
         if(userDetails == null){
@@ -56,7 +56,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
 
         // 4. 刷新 Redis
-        redisUtils.expire(key, RedisConsts.LOGIN_TTL);
+        redisUtils.expire(key, RedisConstants.LOGIN_TTL);
 
         // 5. 存入 context
         Authentication authentication =
