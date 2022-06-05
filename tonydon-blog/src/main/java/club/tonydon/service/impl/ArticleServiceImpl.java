@@ -57,7 +57,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 正式发布的文章
         wrapper.eq(Article::getIsPublish, SystemConstants.ARTICLE_STATUS_PUBLISH);
         // 置顶的文章在前，对 isTop 进行降序排序
-        wrapper.orderByDesc(Article::getIsTop);
+        wrapper.orderByDesc(Article::getPublishTime);
         // 分页查询
         IPage<Article> iPage = new Page<>(pageNum, pageSize);
         page(iPage, wrapper);

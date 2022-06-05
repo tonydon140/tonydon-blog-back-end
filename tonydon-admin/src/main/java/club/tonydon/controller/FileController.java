@@ -1,10 +1,10 @@
 package club.tonydon.controller;
 
 import club.tonydon.constant.ObsConstants;
-import club.tonydon.domain.ResponseResult;
-import club.tonydon.enums.HttpCodeEnum;
 import club.tonydon.util.FileUtils;
 import club.tonydon.util.ObsUtils;
+import club.tonydon.domain.ResponseResult;
+import club.tonydon.enums.HttpCodeEnum;
 import cn.hutool.core.lang.UUID;
 import com.obs.services.ObsClient;
 import org.springframework.web.bind.annotation.PostMapping;

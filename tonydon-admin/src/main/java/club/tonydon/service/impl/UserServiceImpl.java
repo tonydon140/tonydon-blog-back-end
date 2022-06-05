@@ -21,8 +21,6 @@ import java.util.List;
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Resource
-    private UserMapper userMapper;
 
     @Override
     public ResponseResult<UserInfoVo> getUserInfoByToken() {
@@ -61,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 1. 查询正常用户的数量
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getStatus, SystemConstants.USER_STATUS_NORMAL);
-        Long count = userMapper.selectCount(wrapper);
+        Long count = baseMapper.selectCount(wrapper);
         // 2. 判断数量是否等于 1
         if (count == 1){
             return ResponseResult.error(HttpCodeEnum.ONLY_ONE_USER_ERROR);

@@ -1,11 +1,11 @@
 package club.tonydon.controller;
 
-import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.LoginUser;
 import club.tonydon.domain.entity.User;
 import club.tonydon.domain.vo.UserInfoVo;
-import club.tonydon.enums.HttpCodeEnum;
 import club.tonydon.service.UserService;
+import club.tonydon.domain.ResponseResult;
+import club.tonydon.enums.HttpCodeEnum;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,7 +68,6 @@ public class UserController {
         if (success)
             return ResponseResult.success();
         else
-            // todo 完成返回值
             return ResponseResult.error(HttpCodeEnum.NO_ID_ERROR);
     }
 }

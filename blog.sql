@@ -1,3 +1,6 @@
+create database tonydon_blog;
+use tonydon_blog;
+
 # 文章表
 create table td_article
 (
@@ -16,11 +19,8 @@ create table td_article
     update_by    bigint        default null comment '更新人时间',
     update_time  datetime      default null comment '更新时间',
     del_flag     int           default '0' comment '删除标志（0代表未删除，1代表已删除）'
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='文章表';
+) DEFAULT CHARSET = utf8mb4 COMMENT ='文章表';
 
-# drop table td_comment;
-# drop table td_article;
 
 # 创建分类表
 CREATE TABLE `td_category`
@@ -36,8 +36,8 @@ CREATE TABLE `td_category`
     `update_time` datetime     DEFAULT NULL,
     `del_flag`    int          DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='分类表';
+)
+    DEFAULT CHARSET = utf8mb4 COMMENT ='分类表';
 
 insert into `td_category`(`id`, `name`, `pid`, `description`, `status`, `create_by`, `create_time`, `update_by`,
                           `update_time`, `del_flag`)
@@ -45,7 +45,7 @@ values (1, '未分类', -1, '未分类', '0', NULL, NULL, NULL, NULL, 0);
 
 
 # 友链表
-create table td_friends_link
+create table td_friend_link
 (
     id          bigint not null auto_increment primary key,
     name        varchar(128) default null,
@@ -56,29 +56,33 @@ create table td_friends_link
     create_time datetime     DEFAULT NULL comment '创建时间',
     check_time  datetime     default null comment '审核时间',
     del_flag    int          DEFAULT 0 COMMENT '删除标志（0代表未删除，1代表已删除）'
-);
+) DEFAULT CHARSET = utf8mb4 COMMENT ='友链表';
+
 
 # 创建用户表
 CREATE TABLE `sys_user`
 (
-    `id`          bigint      NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `username`    varchar(64) NOT NULL DEFAULT 'NULL' COMMENT '用户名',
-    `nickname`    varchar(64) NOT NULL DEFAULT 'NULL' COMMENT '昵称',
-    `password`    varchar(64) NOT NULL DEFAULT 'NULL' COMMENT '密码',
-    `type`        char(1)              DEFAULT '0' COMMENT '用户类型：0代表普通用户，1代表管理员',
-    `status`      char(1)              DEFAULT '0' COMMENT '账号状态（0正常 1停用）',
-    `email`       varchar(64)          DEFAULT NULL COMMENT '邮箱',
-    `phonenumber` varchar(32)          DEFAULT NULL COMMENT '手机号',
-    `sex`         char(1)              DEFAULT NULL COMMENT '用户性别（0男，1女，2未知）',
-    `avatar`      varchar(128)         DEFAULT NULL COMMENT '头像',
-    `create_by`   bigint               DEFAULT NULL COMMENT '创建人的用户id',
-    `create_time` datetime             DEFAULT NULL COMMENT '创建时间',
-    `update_by`   bigint               DEFAULT NULL COMMENT '更新人',
-    `update_time` datetime             DEFAULT NULL COMMENT '更新时间',
-    `del_flag`    int                  DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
+    `id`           bigint      NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `username`     varchar(64) NOT NULL DEFAULT 'NULL' COMMENT '用户名',
+    `nickname`     varchar(64) NOT NULL DEFAULT 'NULL' COMMENT '昵称',
+    `password`     varchar(64) NOT NULL DEFAULT 'NULL' COMMENT '密码',
+    `type`         char(1)              DEFAULT '0' COMMENT '用户类型：0代表普通用户，1代表管理员',
+    `status`       char(1)              DEFAULT '0' COMMENT '账号状态（0正常 1停用）',
+    `email`        varchar(64)          DEFAULT NULL COMMENT '邮箱',
+    `phone_number` varchar(32)          DEFAULT NULL COMMENT '手机号',
+    `sex`          char(1)              DEFAULT NULL COMMENT '用户性别（0男，1女，2未知）',
+    `avatar`       varchar(128)         DEFAULT NULL COMMENT '头像',
+    `create_by`    bigint               DEFAULT NULL COMMENT '创建人的用户id',
+    `create_time`  datetime             DEFAULT NULL COMMENT '创建时间',
+    `update_by`    bigint               DEFAULT NULL COMMENT '更新人',
+    `update_time`  datetime             DEFAULT NULL COMMENT '更新时间',
+    `del_flag`     int                  DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='用户表';
+) DEFAULT CHARSET = utf8mb4 COMMENT ='用户表';
+
+# admin 1234
+insert into sys_user(username, nickname, password, type, status, email)
+values ('admin', '管理员', '$2a$10$Jnq31rRkNV3RNzXe0REsEOSKaYK8UgVZZqlNlNXqn.JeVcj2NdeZy', 1, 0, 'example@email.com');
 
 # 评论表，无登陆匿名用户评论
 create table td_comment
@@ -93,22 +97,4 @@ create table td_comment
     create_time datetime    default null comment '创建时间',
     del_flag    int         default 0 comment '删除标志（0代表未删除，1代表已删除）',
     foreign key fk (article_id) references td_article (id)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='评论表';
-
-select *
-from td_article;
-select *
-from sys_user;
-select *
-from td_category;
-
-select *
-from td_comment;
-
-
-
-
-
-
-
+) DEFAULT CHARSET = utf8mb4 COMMENT ='评论表';

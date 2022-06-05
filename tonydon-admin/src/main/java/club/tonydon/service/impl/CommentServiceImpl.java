@@ -1,8 +1,8 @@
 package club.tonydon.service.impl;
 
+import club.tonydon.domain.vo.CommentVo;
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.domain.entity.Comment;
-import club.tonydon.domain.vo.CommentVo;
 import club.tonydon.domain.vo.PageVo;
 import club.tonydon.mapper.ArticleMapper;
 import club.tonydon.mapper.CommentMapper;
@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.annotation.Resource;
 import java.util.List;

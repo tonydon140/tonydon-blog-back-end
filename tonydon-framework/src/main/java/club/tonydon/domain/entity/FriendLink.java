@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("td_friends_link")
-public class FriendsLink {
+@TableName("td_friend_link")
+public class FriendLink {
     @TableId(type = IdType.AUTO)
     private Long id;
     private String name;        // 网站名称

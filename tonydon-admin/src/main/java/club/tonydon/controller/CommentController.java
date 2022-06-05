@@ -1,14 +1,12 @@
 package club.tonydon.controller;
 
 import club.tonydon.domain.ResponseResult;
-import club.tonydon.domain.entity.Comment;
 import club.tonydon.domain.vo.CommentVo;
 import club.tonydon.domain.vo.PageVo;
 import club.tonydon.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/comment")

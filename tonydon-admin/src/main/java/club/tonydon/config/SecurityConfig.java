@@ -1,9 +1,8 @@
 package club.tonydon.config;
 
 import club.tonydon.filter.TokenFilter;
-import club.tonydon.handler.security.AccessDeniedHandlerImpl;
-import club.tonydon.handler.security.AuthenticationEntryPointImpl;
-import org.springframework.boot.SpringBootConfiguration;
+import club.tonydon.security.AccessDeniedHandlerImpl;
+import club.tonydon.security.AuthenticationEntryPointImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

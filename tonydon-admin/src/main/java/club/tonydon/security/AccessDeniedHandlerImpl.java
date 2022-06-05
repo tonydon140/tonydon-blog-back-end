@@ -1,4 +1,4 @@
-package club.tonydon.handler.security;
+package club.tonydon.security;
 
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.enums.HttpCodeEnum;

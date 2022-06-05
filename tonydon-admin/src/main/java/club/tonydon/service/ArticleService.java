@@ -30,7 +30,7 @@ public interface ArticleService extends IService<Article> {
     ResponseResult<Object> saveDraft(Article article);
 
     /**
-     * 更新文章
+     * 更新已发布的文章
      */
     ResponseResult<Object> updateArticle(Article article);
 

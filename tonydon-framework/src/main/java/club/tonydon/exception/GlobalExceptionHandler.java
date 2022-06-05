@@ -1,10 +1,8 @@
-package club.tonydon.handler.exception;
+package club.tonydon.exception;
 
 import club.tonydon.domain.ResponseResult;
 import club.tonydon.enums.HttpCodeEnum;
-import club.tonydon.exception.NoFilenameException;
-import club.tonydon.exception.NoIdException;
-import club.tonydon.exception.SystemException;;
+;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

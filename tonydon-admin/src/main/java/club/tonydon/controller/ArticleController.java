@@ -51,4 +51,11 @@ public class ArticleController {
         return articleService.getArticleDetailById(id);
     }
 
+    /**
+     * 更新已发布的文章
+     */
+    @PutMapping("/{id}")
+    public ResponseResult<Object> updateArticle(@RequestBody Article article){
+        return articleService.updateArticle(article);
+    }
 }
