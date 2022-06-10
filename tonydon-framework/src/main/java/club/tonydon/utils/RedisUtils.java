@@ -73,8 +73,6 @@ public class RedisUtils {
 
 
     public void setObjectHash(String key, Object obj) {
-
-
         // 将对象转为 Map 集合
         Map<String, Object> objectMap = BeanUtil.beanToMap(
                 obj,

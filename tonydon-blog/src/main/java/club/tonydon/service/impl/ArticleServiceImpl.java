@@ -8,6 +8,7 @@ import club.tonydon.domain.vo.ArticleDetailVo;
 import club.tonydon.domain.vo.ArticleVo;
 import club.tonydon.domain.vo.HotArticleVo;
 import club.tonydon.domain.vo.PageVo;
+import club.tonydon.enums.HttpCodeEnum;
 import club.tonydon.mapper.ArticleMapper;
 import club.tonydon.mapper.CategoryMapper;
 import club.tonydon.service.ArticleService;
@@ -67,9 +68,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // stream流处理
         articleList = articleList.stream()
                 // 获取分类id，查询分类名称
-                .map(article -> article.setCategoryName(categoryMapper.selectById(article.getCategoryId()).getName()))
-                .collect(Collectors.toList());
-
+                .map(article -> {
+                    Category category = categoryMapper.selectById(article.getCategoryId());
+                    return article.setCategoryName(category != null ? category.getName() : "分类不存在");
+                }).collect(Collectors.toList());
         // 封装数据
         List<ArticleVo> voList = BeanCopyUtils.copyBeanList(articleList, ArticleVo.class);
 
@@ -82,6 +84,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult<ArticleDetailVo> getArticleDetail(Long id) {
         // 查询文章
         Article article = getById(id);
+        if (article == null){
+            return ResponseResult.error(HttpCodeEnum.NO_ID_ERROR);
+        }
         // 封装vo
         ArticleDetailVo vo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         // 根据分类id，查询分类名称
@@ -98,7 +103,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult<Object> addViewCount(Long id) {
         // 访问量加一
         boolean success = lambdaUpdate().setSql("view_count = view_count + 1").eq(Article::getId, id).update();
-        if(success) return ResponseResult.success();
+        if (success) return ResponseResult.success();
         else return ResponseResult.error();
     }
 }

@@ -13,5 +13,6 @@ public class ArticleVo {
     private String categoryName;    // 分类名
     private String thumbnail;       // 缩略图
     private Long viewCount;         // 访问量
-    private Date publishTime;        // 创建时间
+    private Date publishTime;       // 创建时间
+    private Date updateTime;        // 更新时间
 }

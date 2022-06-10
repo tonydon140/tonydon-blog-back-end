@@ -16,6 +16,8 @@ public enum HttpCodeEnum {
     LOGIN_ERROR(505, "用户名或密码错误"),
     NO_ID_ERROR(506,"id不存在"),
     ONLY_ONE_USER_ERROR(507,"只有一个用户"),
+    CANNOT_REMOVE_NOT_CLASSIFIED(508, "不能删除未分类"),
+    CATEGORY_HAS_ARTICLE(509, "分类下存在文章"),
 
     // 文件错误
     FILE_EMPTY_ERROR(510, "空文件上传"),

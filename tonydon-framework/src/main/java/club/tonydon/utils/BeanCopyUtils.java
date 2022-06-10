@@ -2,6 +2,7 @@ package club.tonydon.utils;
 
 import org.springframework.beans.BeanUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +16,13 @@ public class BeanCopyUtils {
         T result = null;
         try {
             // 创建目标对象
-            result = clazz.newInstance();
+            result = clazz.getDeclaredConstructor().newInstance();
             // 实现拷贝
             BeanUtils.copyProperties(source, result);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
         return result;
     }

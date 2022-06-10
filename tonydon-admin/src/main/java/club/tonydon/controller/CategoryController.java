@@ -33,11 +33,12 @@ public class CategoryController {
      */
     @DeleteMapping("/{id}")
     public ResponseResult<Object> remove(@PathVariable Long id){
-        boolean success = categoryService.removeById(id);
-        if(success) return ResponseResult.success();
-        else return ResponseResult.error();
+        return categoryService.removeCategory(id);
     }
 
-
+    @DeleteMapping("/confirm/{id}")
+    public ResponseResult<Object> confirmRemove(@PathVariable Long id){
+        return  categoryService.confirmRemoveCategory(id);
+    }
 
 }

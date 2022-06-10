@@ -41,11 +41,22 @@ public class ArticleController {
         else return articleService.updateDraft(article);
     }
 
+    /**
+     * 获取文章列表
+     *
+     * @return 文章集合
+     */
     @GetMapping
     public ResponseResult<List<ArticleListVo>> getArticleList() {
         return articleService.getArticleList();
     }
 
+    /**
+     * 根据 id 返回文章编辑视图
+     *
+     * @param id id
+     * @return 文章编辑视图
+     */
     @GetMapping("/{id}")
     public ResponseResult<ArticleEditVo> getArticleDetail(@PathVariable Long id) {
         return articleService.getArticleDetailById(id);
@@ -55,7 +66,19 @@ public class ArticleController {
      * 更新已发布的文章
      */
     @PutMapping("/{id}")
-    public ResponseResult<Object> updateArticle(@RequestBody Article article){
+    public ResponseResult<Object> updateArticle(@RequestBody Article article) {
         return articleService.updateArticle(article);
+    }
+
+    /**
+     * 根据 id 删除文章
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    @DeleteMapping("/{id}")
+    public ResponseResult<Object> remove(@PathVariable Long id) {
+        articleService.removeById(id);
+        return ResponseResult.success();
     }
 }

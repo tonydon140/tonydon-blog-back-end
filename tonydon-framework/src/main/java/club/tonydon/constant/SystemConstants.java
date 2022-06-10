@@ -14,7 +14,7 @@ public class SystemConstants {
     /**
      * 分类正常
      */
-    public static final String CATEGORY_STATUS_NORMAL = "0";
+
 
     /**
      * 友链审核通过
@@ -31,10 +31,18 @@ public class SystemConstants {
      */
     public static final String LINK_STATUS_UNREVIEWED = "2";
 
-    /**
-     * 分类状态正常
-     */
-    public static final String CATEGORY_NORMAL = "0";
+    /*************************************************
+     *
+     * Category 分类
+     *
+     *************************************************/
+    // 分类状态正常
+    public static final String CATEGORY_STATUS_NORMAL = "0";
+    // 未分类的 id
+    public static final long NOT_CLASSIFIED_ID = 1L;
+    // 未分类的名称
+    public static final String NOT_CLASSIFIED_NAME = "未分类";
+
 
     /**
      * 用户状态正常

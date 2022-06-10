@@ -23,25 +23,21 @@ create table td_article
 
 
 # 创建分类表
-CREATE TABLE `td_category`
+create table td_category
 (
-    `id`          bigint NOT NULL AUTO_INCREMENT,
-    `name`        varchar(128) DEFAULT NULL COMMENT '分类名',
-    `pid`         bigint       DEFAULT '-1' COMMENT '父分类id，如果没有父分类为-1',
-    `description` varchar(512) DEFAULT NULL COMMENT '描述',
-    `status`      char(1)      DEFAULT '0' COMMENT '状态0:正常,1禁用',
-    `create_by`   bigint       DEFAULT NULL,
-    `create_time` datetime     DEFAULT NULL,
-    `update_by`   bigint       DEFAULT NULL,
-    `update_time` datetime     DEFAULT NULL,
-    `del_flag`    int          DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
-    PRIMARY KEY (`id`)
-)
-    DEFAULT CHARSET = utf8mb4 COMMENT ='分类表';
-
-insert into `td_category`(`id`, `name`, `pid`, `description`, `status`, `create_by`, `create_time`, `update_by`,
-                          `update_time`, `del_flag`)
-values (1, '未分类', -1, '未分类', '0', NULL, NULL, NULL, NULL, 0);
+    id            bigint primary key auto_increment,
+    name          varchar(64) unique comment '分类名',
+    description   varchar(256) default null comment '描述',
+    pid           bigint       default -1 comment '父分类id，如果没有父分类为 -1',
+    status        char(1)      default '0' comment '状态0:正常,1禁用',
+    `create_by`   bigint       default null,
+    `create_time` datetime     default null,
+    `update_by`   bigint       default null,
+    `update_time` datetime     default null,
+    `del_flag`    int          default '0' comment '删除标志（0代表未删除，1代表已删除）'
+) default charset utf8mb4 comment '分类表';
+insert into td_category(`id`, `name`, `pid`, `description`)
+values (1, '未分类', -1, '未分类');
 
 
 # 友链表
