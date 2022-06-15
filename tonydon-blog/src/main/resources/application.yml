@@ -2,7 +2,7 @@
 spring:
   # 激活配置
   profiles:
-    active: dev
+    active: pro
 
 # 服务器配置
 server:

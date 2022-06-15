@@ -10,6 +10,7 @@ import top.tonydon.utils.BeanCopyUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +29,7 @@ public class FriendLinkServiceImpl extends ServiceImpl<FriendLinkMapper, FriendL
         lambdaUpdate()
                 .eq(FriendLink::getId, id)
                 .set(FriendLink::getStatus, SystemConstants.LINK_STATUS_NORMAL)
+                .set(FriendLink::getCheckTime, LocalDateTime.now())
                 .update();
         return ResponseResult.success();
     }

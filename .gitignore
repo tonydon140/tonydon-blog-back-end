@@ -1,9 +1,12 @@
 */target
 *.log
-/tonydon-admin/src/main/resources/obs.yml
 /tonydon-blog/src/main/resources/pexels.yml
 /tonydon-blog/src/main/resources/application-pro.yml
+/tonydon-blog/src/main/resources/application-test.yml
+
+/tonydon-admin/src/main/resources/obs.yml
 /tonydon-admin/src/main/resources/application-pro.yml
+/tonydon-admin/src/main/resources/application-test.yml
 
 # 编辑器文件
 .idea
