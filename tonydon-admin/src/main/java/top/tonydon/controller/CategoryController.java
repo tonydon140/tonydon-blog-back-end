@@ -23,7 +23,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseResult<Object> save(@RequestBody Category category){
-        return categoryService.saveCategory(category);
+        return ResponseResult.success(categoryService.save(category));
     }
 
     /**

@@ -44,7 +44,6 @@ public class FriendLinkServiceImpl extends ServiceImpl<FriendLinkMapper, FriendL
         if(count != 0) return ResponseResult.error();
 
         // 2. 保存友链申请
-        friendLink.setCreateTime(new Date());
         save(friendLink);
         return ResponseResult.success();
     }

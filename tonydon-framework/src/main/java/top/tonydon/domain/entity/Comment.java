@@ -1,5 +1,6 @@
 package top.tonydon.domain.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -16,7 +17,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("td_comment")
 public class Comment {
-    @TableId(type = IdType.AUTO)
     private Long id;            // 评论id
     private String nickname;    // 用户昵称
     private String avatar;      // 用户头像
@@ -26,8 +26,8 @@ public class Comment {
     private String content;     // 评论内容
 
     // 系统数据
-    private Date createTime;
-    private Integer delFlag;
+    private LocalDateTime createTime;
+    private String deleted;
 
     @TableField(exist = false)
     private String replyNickname;   // 回复评论用户昵称

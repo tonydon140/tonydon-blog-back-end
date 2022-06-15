@@ -25,8 +25,10 @@ public class ArticleController {
      */
     @PostMapping("/publish")
     public ResponseResult<Object> publishArticle(@RequestBody Article article) {
-        if (article.getId() == null) return articleService.publishNew(article);
-        else return articleService.publishDraft(article);
+        if (article.getId() == null)
+            return articleService.publishNew(article);
+        else
+            return articleService.publishDraft(article);
     }
 
 
@@ -37,8 +39,10 @@ public class ArticleController {
      */
     @PostMapping("/draft")
     public ResponseResult<Object> saveDraftArticle(@RequestBody Article article) {
-        if (article.getId() == null) return articleService.saveDraft(article);
-        else return articleService.updateDraft(article);
+        if (article.getId() == null)
+            return ResponseResult.success(articleService.save(article));
+        else
+            return  ResponseResult.success(articleService.updateById(article));
     }
 
     /**

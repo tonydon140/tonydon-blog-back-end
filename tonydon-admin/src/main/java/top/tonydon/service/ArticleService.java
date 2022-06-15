@@ -20,16 +20,6 @@ public interface ArticleService extends IService<Article> {
     ResponseResult<Object> publishDraft(Article article);
 
     /**
-     * 更新草稿
-     */
-    ResponseResult<Object> updateDraft(Article article);
-
-    /**
-     * 保存草稿
-     */
-    ResponseResult<Object> saveDraft(Article article);
-
-    /**
      * 更新已发布的文章
      */
     ResponseResult<Object> updateArticle(Article article);

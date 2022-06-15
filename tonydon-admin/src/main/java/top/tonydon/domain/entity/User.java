@@ -1,10 +1,15 @@
 package top.tonydon.domain.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("sys_user")
 public class User {
-    //主键
-    @TableId(type = IdType.AUTO)
+
     private Long id;
     //用户名
     private String username;
@@ -36,15 +40,19 @@ public class User {
     private String sex;
     //头像
     private String avatar;
-    //创建人的用户id
+
     private Long createBy;
-    //创建时间
-    private Date createTime;
-    //更新人
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createTime;
+
     private Long updateBy;
-    //更新时间
-    private Date updateTime;
-    //删除标志（0代表未删除，1代表已删除）
-    private Integer delFlag;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime updateTime;
+
+    private String deleted;
 }
 

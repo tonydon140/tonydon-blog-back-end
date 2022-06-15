@@ -1,5 +1,6 @@
 package top.tonydon.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.constant.LoginConstants;
 import top.tonydon.constant.RedisConstants;
 import top.tonydon.domain.ResponseResult;
@@ -8,7 +9,6 @@ import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.utils.RedisUtils;
 import top.tonydon.utils.WebUtils;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +31,7 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
         // 1. 获取请求头中的 token
         String token = request.getHeader(LoginConstants.TOKEN_KEY);
 
@@ -41,7 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
             }
             // 非请求登陆，直接拒绝访问
-            else WebUtils.renderString(response, JSON.toJSONString(ResponseResult.error(HttpCodeEnum.NEED_LOGIN)));
+            else WebUtils.renderString(response, mapper.writeValueAsString(ResponseResult.error(HttpCodeEnum.NEED_LOGIN)));
             return;
         }
 
@@ -51,7 +52,7 @@ public class TokenFilter extends OncePerRequestFilter {
         // 用户不存在，登陆过期
         if(userDetails == null){
             // 提示重新登陆
-            WebUtils.renderString(response, JSON.toJSONString(ResponseResult.error(HttpCodeEnum.NEED_LOGIN)));
+            WebUtils.renderString(response, mapper.writeValueAsString(ResponseResult.error(HttpCodeEnum.NEED_LOGIN)));
             return;
         }
 

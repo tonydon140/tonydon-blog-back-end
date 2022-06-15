@@ -2,6 +2,7 @@ package top.tonydon.domain.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -14,8 +15,8 @@ public class CategoryVo {
     private String status;      // 状态：0正常, 1禁用
     private Long createBy;
     private String createUsername;
-    private Date createTime;
+    private LocalDateTime createTime;
     private Long updateBy;
     private String updateUsername;
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }

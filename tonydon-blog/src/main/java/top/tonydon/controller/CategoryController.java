@@ -15,11 +15,11 @@ import java.util.List;
 public class CategoryController {
 
     @Resource
-    private CategoryService service;
+    private CategoryService categoryService;
 
     @GetMapping("/getAll")
     public ResponseResult<List<CategoryVo>> getAll() {
-        return service.getAll();
+        return categoryService.findAll();
     }
 
 }

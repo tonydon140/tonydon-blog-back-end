@@ -2,6 +2,7 @@ package top.tonydon.domain.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -13,5 +14,5 @@ public class CommentVo {
     private Long articleId;         // 所属文章id
     private String replyNickname;  // 回复评论用户昵称
     private String content;         // 评论内容
-    private Date createTime;        // 创建时间
+    private LocalDateTime createTime;        // 创建时间
 }

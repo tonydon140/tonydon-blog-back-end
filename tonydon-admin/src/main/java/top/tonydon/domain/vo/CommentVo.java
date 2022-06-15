@@ -17,7 +17,7 @@ public class CommentVo {
     private String content;     // 评论内容
 
     // 系统数据
-    private Date createTime;
+    private LocalDateTime createTime;
     private Integer delFlag;
 
     private String replyNickname;   // 回复评论用户昵称

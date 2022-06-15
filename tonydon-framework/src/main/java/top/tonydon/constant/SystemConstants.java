@@ -49,6 +49,6 @@ public class SystemConstants {
      */
     public static final String USER_STATUS_NORMAL = "0";
 
-    public static final Integer DEL_DELETED = 1;
-    public static final Integer DEL_NORMAL = 0;
+    public static final String DEL_DELETED = "1";
+    public static final String DEL_NORMAL = "0";
 }

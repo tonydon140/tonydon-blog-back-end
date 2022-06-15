@@ -10,8 +10,6 @@ import java.util.List;
 public interface CategoryService extends IService<Category> {
     ResponseResult<List<CategoryVo>> getAll();
 
-    ResponseResult<Object> saveCategory(Category category);
-
     ResponseResult<Object> removeCategory(Long id);
 
     ResponseResult<Object> confirmRemoveCategory(Long id);

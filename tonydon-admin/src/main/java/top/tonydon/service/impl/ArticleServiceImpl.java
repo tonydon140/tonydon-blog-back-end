@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,8 +36,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult<Object> publishNew(Article article) {
         // 设置更新时间、更新人、发布时间、状态
-        article.setUpdateTime(new Date());
-        article.setPublishTime(new Date());
         article.setUpdateBy(article.getPublishBy());
         article.setIsPublish(SystemConstants.ARTICLE_STATUS_PUBLISH);
 
@@ -55,8 +54,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult<Object> publishDraft(Article article) {
         // 设置更新时间、更新人、发布时间、状态
-        article.setUpdateTime(new Date());
-        article.setPublishTime(new Date());
         article.setUpdateBy(article.getPublishBy());
         article.setIsPublish(SystemConstants.ARTICLE_STATUS_PUBLISH);
 
@@ -73,34 +70,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
 
-    @Override
-    public ResponseResult<Object> updateDraft(Article article) {
-        // 设置更新时间
-        article.setUpdateTime(new Date());
-        updateById(article);
-        return ResponseResult.success();
-    }
-
-    /**
-     * 保存新的草稿
-     *
-     * @param article 草稿文章
-     * @return 文章信息
-     */
-    @Override
-    public ResponseResult<Object> saveDraft(Article article) {
-        // 设置更新时间
-        article.setUpdateTime(new Date());
-        // 保存文章草稿
-        save(article);
-        return ResponseResult.success();
-    }
 
     @Override
     public ResponseResult<Object> updateArticle(Article article) {
-        // 设置更新时间
-        article.setUpdateTime(new Date());
-
         // 更新摘要
         String content = article.getContent();
         if (content.length() > 160)

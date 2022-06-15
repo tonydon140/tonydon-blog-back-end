@@ -35,7 +35,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return 分类列表
      */
     @Override
-    public ResponseResult<List<CategoryVo>> getAll() {
+    public ResponseResult<List<CategoryVo>> findAll() {
         // 查询文章表，状态为已发布的文章
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Article::getIsPublish, SystemConstants.ARTICLE_STATUS_PUBLISH);

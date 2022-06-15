@@ -26,12 +26,6 @@ import java.util.stream.Collectors;
 @Service("commentService")
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
-    @Override
-    public ResponseResult<Object> saveComment(Comment comment) {
-        comment.setCreateTime(new Date());
-        save(comment);
-        return ResponseResult.success();
-    }
 
     @Override
     public ResponseResult<PageVo<CommentVo>> getCommentList(Long articleId, Long pageNum, Long pageSize) {

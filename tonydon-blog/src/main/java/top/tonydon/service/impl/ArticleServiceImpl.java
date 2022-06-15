@@ -1,5 +1,6 @@
 package top.tonydon.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import top.tonydon.constant.SystemConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Article;
@@ -20,6 +21,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +61,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 正式发布的文章
         wrapper.eq(Article::getIsPublish, SystemConstants.ARTICLE_STATUS_PUBLISH);
         // 置顶的文章在前，对 isTop 进行降序排序
-        wrapper.orderByDesc(Article::getPublishTime);
+//        wrapper.orderByDesc(Article::getPublishTime);
+        wrapper.orderByDesc((SFunction<Article, LocalDateTime>) Article::getPublishTime);
         // 分页查询
         IPage<Article> iPage = new Page<>(pageNum, pageSize);
         page(iPage, wrapper);

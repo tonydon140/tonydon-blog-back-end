@@ -13,9 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-04-08 17:16:24
  */
 public interface CommentService extends IService<Comment> {
-
-    ResponseResult<Object> saveComment(Comment comment);
-
     ResponseResult<PageVo<CommentVo>> getCommentList(Long articleId, Long pageNum, Long pageSize);
 }
 

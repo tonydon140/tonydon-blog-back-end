@@ -1,9 +1,9 @@
 package top.tonydon.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.utils.WebUtils;
-import com.alibaba.fastjson.JSON;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
@@ -35,7 +35,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         else{
             result = ResponseResult.error(HttpCodeEnum.SYSTEM_ERROR.getCode(), "认证或授权失败");
         }
-
-        WebUtils.renderString(response, JSON.toJSONString(result));
+        ObjectMapper mapper = new ObjectMapper();
+        WebUtils.renderString(response, mapper.writeValueAsString(result));
     }
 }

@@ -2,6 +2,7 @@ package top.tonydon.domain.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -17,10 +18,10 @@ public class ArticleListVo {
     private String isComment;   // 是否允许评论（0禁止，1允许）
 
     private Long publishBy;         // 创建人 id
-    private Date publishTime;       // 创建时间
+    private LocalDateTime publishTime;       // 创建时间
     private String publishName;     // 创建人名称
 
     private Long updateBy;      // 更新人 id
-    private Date updateTime;    // 更新时间
+    private LocalDateTime updateTime;    // 更新时间
     private String updateName;  // 更新人名称
 }

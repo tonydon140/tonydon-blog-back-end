@@ -61,7 +61,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         user.setCreateBy(loginUser.getUser().getId());
-        user.setCreateTime(new Date());
 
         // 3. 保存用户
         boolean success = userService.save(user);

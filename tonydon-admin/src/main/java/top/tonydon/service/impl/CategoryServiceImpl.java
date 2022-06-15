@@ -56,20 +56,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         return ResponseResult.success(voList);
     }
 
-    /**
-     * 保存一个分类
-     *
-     * @param category 分类
-     * @return 响应数据
-     */
-    @Override
-    public ResponseResult<Object> saveCategory(Category category) {
-        // 1. 设置创建时间
-        category.setCreateTime(new Date());
-        // 2. 保存分类，响应数据
-        if (save(category)) return ResponseResult.success();
-        else return ResponseResult.error();
-    }
 
     @Override
     public ResponseResult<Object> removeCategory(Long id) {
