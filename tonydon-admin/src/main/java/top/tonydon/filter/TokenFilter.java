@@ -1,14 +1,14 @@
 package top.tonydon.filter;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.constant.LoginConstants;
 import top.tonydon.constant.RedisConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.LoginUser;
 import top.tonydon.enums.HttpCodeEnum;
-import top.tonydon.utils.RedisUtils;
-import top.tonydon.utils.WebUtils;
-import cn.hutool.core.util.StrUtil;
+import top.tonydon.util.RedisUtils;
+import top.tonydon.util.WebUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +36,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String token = request.getHeader(LoginConstants.TOKEN_KEY);
 
         // 2. 判断 token 是否为空
-        if (StrUtil.isBlank(token)) {
+        if (StringUtils.isBlank(token)) {
             // 如果是请求登陆，直接放行
             if(LoginConstants.LOGIN_PATH.equals(request.getServletPath())){
                 filterChain.doFilter(request,response);

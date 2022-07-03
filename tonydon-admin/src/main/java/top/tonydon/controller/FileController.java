@@ -5,7 +5,6 @@ import top.tonydon.util.FileUtils;
 import top.tonydon.util.ObsUtils;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.enums.HttpCodeEnum;
-import cn.hutool.core.lang.UUID;
 import com.obs.services.ObsClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/upload")
@@ -38,7 +38,7 @@ public class FileController {
             return ResponseResult.error(HttpCodeEnum.NOT_IMAGE_ERROR);
 
         // 3. 上传图片名称和存储路径
-        String obsFilename = UUID.randomUUID().toString(true) + suffix;
+        String obsFilename = UUID.randomUUID().toString().replace("-", "") + suffix;
         String objectKey = ObsUtils.getImageKeyPrefix() + obsFilename;
 
         // 4. 上传文件

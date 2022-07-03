@@ -7,7 +7,7 @@ import top.tonydon.domain.vo.PageVo;
 import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.mapper.CommentMapper;
 import top.tonydon.service.CommentService;
-import top.tonydon.utils.BeanCopyUtils;
+import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

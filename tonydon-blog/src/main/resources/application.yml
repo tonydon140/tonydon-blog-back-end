@@ -2,7 +2,8 @@
 spring:
   # 激活配置
   profiles:
-    active: pro
+    active: dev
+
 
 # 服务器配置
 server:
@@ -27,5 +28,6 @@ logging:
     rollingpolicy:
       max-file-size: 256KB
       file-name-pattern: server.%d{yyyy-MM-dd}.%i.log
+      max-history: 7
   level:
     top.tonydon.mapper: debug

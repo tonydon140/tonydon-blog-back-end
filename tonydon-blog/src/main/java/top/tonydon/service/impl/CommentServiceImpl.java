@@ -1,10 +1,13 @@
 package top.tonydon.service.impl;
 
 import top.tonydon.domain.ResponseResult;
+import top.tonydon.domain.entity.Article;
 import top.tonydon.domain.entity.Comment;
 import top.tonydon.domain.vo.CommentVo;
 import top.tonydon.domain.vo.PageVo;
-import top.tonydon.utils.BeanCopyUtils;
+import top.tonydon.enums.HttpCodeEnum;
+import top.tonydon.mapper.ArticleMapper;
+import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,8 +15,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import top.tonydon.mapper.CommentMapper;
 import top.tonydon.service.CommentService;
 import org.springframework.stereotype.Service;
+import top.tonydon.util.MailUtils;
 
-import java.util.Date;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +30,11 @@ import java.util.stream.Collectors;
 @Service("commentService")
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
+    @Resource
+    private MailUtils mailUtils;
+
+    @Resource
+    private ArticleMapper articleMapper;
 
     @Override
     public ResponseResult<PageVo<CommentVo>> getCommentList(Long articleId, Long pageNum, Long pageSize) {
@@ -40,13 +49,28 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         // 3. 补全回复评论的昵称
         commentList = commentList.stream().peek(comment -> {
-            if(comment.getReplyId() != -1)
+            if (comment.getReplyId() != -1)
                 comment.setReplyNickname(getById(comment.getReplyId()).getNickname());
         }).collect(Collectors.toList());
 
         // 4. 封装成 vo 并返回
         List<CommentVo> voList = BeanCopyUtils.copyBeanList(commentList, CommentVo.class);
         return ResponseResult.success(new PageVo<>(voList, iPage.getTotal()));
+    }
+
+    @Override
+    public ResponseResult<Object> addOne(Comment comment) {
+        // 查询评论的文章
+        Article article = articleMapper.selectById(comment.getArticleId());
+        if (article == null) return ResponseResult.error(HttpCodeEnum.ARTICLE_NOT_EXIST);
+
+        // 保存评论
+        save(comment);
+
+        // 开启新的线程发送邮件
+        comment.setArticleTitle(article.getTitle());
+        new Thread(() -> mailUtils.sendCommentMail(comment)).start();
+        return ResponseResult.success();
     }
 }
 

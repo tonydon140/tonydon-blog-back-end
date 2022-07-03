@@ -3,7 +3,7 @@ package top.tonydon.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.enums.HttpCodeEnum;
-import top.tonydon.utils.WebUtils;
+import top.tonydon.util.WebUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 

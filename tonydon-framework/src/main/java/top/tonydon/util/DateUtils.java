@@ -1,4 +1,4 @@
-package top.tonydon.utils;
+package top.tonydon.util;
 
 import top.tonydon.domain.entity.Hour;
 

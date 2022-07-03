@@ -1,6 +1,6 @@
 package top.tonydon.service.impl;
 
-import top.tonydon.constant.SystemConstants;
+import top.tonydon.constant.EntityConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Article;
 import top.tonydon.domain.entity.Category;
@@ -11,14 +11,13 @@ import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.mapper.CategoryMapper;
 import top.tonydon.mapper.UserMapper;
 import top.tonydon.service.CategoryService;
-import top.tonydon.utils.BeanCopyUtils;
+import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +60,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public ResponseResult<Object> removeCategory(Long id) {
         Category category = getById(id);
         // 不能删除未分类
-        if (SystemConstants.NOT_CLASSIFIED_NAME.equals(category.getName())) {
+        if (EntityConstants.NOT_CLASSIFIED_NAME.equals(category.getName())) {
             return ResponseResult.error(HttpCodeEnum.CANNOT_REMOVE_NOT_CLASSIFIED);
         }
 
@@ -89,7 +88,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         // 查询当前分类下的所有文章，将文章的分类设置为未分类
         LambdaUpdateChainWrapper<Article> updateWrapper = new LambdaUpdateChainWrapper<>(articleMapper);
         updateWrapper.eq(Article::getCategoryId, id)
-                .set(Article::getCategoryId, SystemConstants.NOT_CLASSIFIED_ID)
+                .set(Article::getCategoryId, EntityConstants.NOT_CLASSIFIED_ID)
                 .update();
         // 删除该分类
         removeById(id);

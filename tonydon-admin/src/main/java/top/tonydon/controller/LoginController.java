@@ -1,11 +1,11 @@
 package top.tonydon.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.User;
 import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.exception.SystemException;
 import top.tonydon.service.LoginService;
-import cn.hutool.core.util.StrUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseResult<Object> login(@RequestBody User user) {
         // 如果用户名为空
-        if(StrUtil.isBlank(user.getUsername())){
+        if(StringUtils.isBlank(user.getUsername())){
             // 提示必须要传递用户名
             throw new SystemException(HttpCodeEnum.REQUIRE_USERNAME);
         }

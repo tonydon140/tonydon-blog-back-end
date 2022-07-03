@@ -2,7 +2,7 @@ package top.tonydon.controller;
 
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.vo.ArticleDetailVo;
-import top.tonydon.domain.vo.ArticleVo;
+import top.tonydon.domain.vo.ArticleListVo;
 import top.tonydon.domain.vo.HotArticleVo;
 import top.tonydon.domain.vo.PageVo;
 import top.tonydon.service.ArticleService;
@@ -27,9 +27,9 @@ public class ArticleController {
 
     // 获取文章列表
     @GetMapping("/{pageNum}/{pageSize}/{categoryId}")
-    public ResponseResult<PageVo<ArticleVo>> articleList(@PathVariable Integer pageNum,
-                                                         @PathVariable Integer pageSize,
-                                                         @PathVariable Long categoryId) {
+    public ResponseResult<PageVo<ArticleListVo>> articleList(@PathVariable Integer pageNum,
+                                                             @PathVariable Integer pageSize,
+                                                             @PathVariable Long categoryId) {
         return articleService.articleList(pageNum, pageSize, categoryId);
     }
 

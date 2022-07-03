@@ -6,19 +6,17 @@ import top.tonydon.domain.vo.ArticleEditVo;
 import top.tonydon.domain.vo.ArticleListVo;
 import top.tonydon.mapper.UserMapper;
 import top.tonydon.service.ArticleService;
-import top.tonydon.constant.SystemConstants;
+import top.tonydon.constant.EntityConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Article;
 import top.tonydon.exception.NoIdException;
 import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.mapper.CategoryMapper;
-import top.tonydon.utils.BeanCopyUtils;
+import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +35,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult<Object> publishNew(Article article) {
         // 设置更新时间、更新人、发布时间、状态
         article.setUpdateBy(article.getPublishBy());
-        article.setIsPublish(SystemConstants.ARTICLE_STATUS_PUBLISH);
+        article.setIsPublish(EntityConstants.ARTICLE_STATUS_PUBLISH);
 
         // 设置摘要
         String content = article.getContent();
@@ -55,7 +53,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult<Object> publishDraft(Article article) {
         // 设置更新时间、更新人、发布时间、状态
         article.setUpdateBy(article.getPublishBy());
-        article.setIsPublish(SystemConstants.ARTICLE_STATUS_PUBLISH);
+        article.setIsPublish(EntityConstants.ARTICLE_STATUS_PUBLISH);
 
         // 设置摘要
         String content = article.getContent();

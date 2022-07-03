@@ -7,9 +7,8 @@ import top.tonydon.domain.vo.UserInfoVo;
 import top.tonydon.service.LoginService;
 import top.tonydon.constant.RedisConstants;
 import top.tonydon.domain.ResponseResult;
-import top.tonydon.utils.BeanCopyUtils;
-import top.tonydon.utils.RedisUtils;
-import cn.hutool.core.lang.UUID;
+import top.tonydon.util.BeanCopyUtils;
+import top.tonydon.util.RedisUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser) afterAuth.getPrincipal();
 
         // 3. 根据 UUID 生成 token，并将 token 存入 LoginUser 中
-        String token = UUID.randomUUID().toString(true);
+        String token = UUID.randomUUID().toString().replace("-","");
         loginUser.setToken(token);
 
         // 4. 将用户消息存入 redis，使用 token 作为 key

@@ -1,12 +1,12 @@
 package top.tonydon.service.impl;
 
-import top.tonydon.constant.SystemConstants;
+import top.tonydon.constant.EntityConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.LoginUser;
 import top.tonydon.domain.vo.UserInfoVo;
 import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.mapper.UserMapper;
-import top.tonydon.utils.BeanCopyUtils;
+import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import top.tonydon.domain.entity.User;
@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public ResponseResult<List<UserInfoVo>> getAll() {
         // 1. 查询状态正常的用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getStatus, SystemConstants.USER_STATUS_NORMAL);
+        wrapper.eq(User::getStatus, EntityConstants.USER_STATUS_NORMAL);
         List<User> list = list(wrapper);
         // 2. 转换为 vo 并返回
         List<UserInfoVo> voList = BeanCopyUtils.copyBeanList(list, UserInfoVo.class);
@@ -57,7 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public ResponseResult<Object> removeById(Long id) {
         // 1. 查询正常用户的数量
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getStatus, SystemConstants.USER_STATUS_NORMAL);
+        wrapper.eq(User::getStatus, EntityConstants.USER_STATUS_NORMAL);
         Long count = baseMapper.selectCount(wrapper);
         // 2. 判断数量是否等于 1
         if (count == 1){

@@ -1,9 +1,10 @@
-package top.tonydon.utils;
+package top.tonydon.util;
 
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BeanCopyUtils {
@@ -32,5 +33,9 @@ public class BeanCopyUtils {
         return list.stream()
                 .map(o -> copyBean(o, clazz))
                 .collect(Collectors.toList());
+    }
+
+    public static Map<String, Object> beanToMap(Object bean){
+        return null;
     }
 }

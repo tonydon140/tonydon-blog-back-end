@@ -56,5 +56,8 @@ public class Article {
     // 发布人名称
     @TableField(exist = false)
     private String publishName;
+
+    @TableField(exist = false)
+    private Long commentCount;
 }
 

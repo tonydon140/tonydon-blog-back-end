@@ -2,13 +2,14 @@
 spring:
   # 激活配置
   profiles:
-    active: pro
+    active: dev
   servlet:
     # 上传配置
     multipart:
       enabled: true
       max-file-size: 5MB
       max-request-size: 5MB
+
 
 # 服务器配置
 server:
@@ -33,5 +34,6 @@ logging:
     rollingpolicy:
       max-file-size: 256KB
       file-name-pattern: server.%d{yyyy-MM-dd}.%i.log
+      max-history: 7
   level:
     top.tonydon.mapper: debug

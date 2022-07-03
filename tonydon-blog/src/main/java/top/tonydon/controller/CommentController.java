@@ -24,7 +24,7 @@ public class CommentController {
      */
     @PostMapping()
     public ResponseResult<Object> addComment(@RequestBody Comment comment) {
-        return ResponseResult.success(commentService.save(comment));
+        return commentService.addOne(comment);
     }
 
 

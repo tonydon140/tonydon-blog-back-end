@@ -1,8 +1,8 @@
 package top.tonydon.util;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.exception.SystemException;
-import cn.hutool.core.util.StrUtil;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
@@ -31,7 +31,7 @@ public class FileUtils {
 
         // 2. 获取文件后缀名，如果文件名未空，抛出异常
         String filename = file.getOriginalFilename();
-        if (StrUtil.isEmpty(filename))
+        if (StringUtils.isEmpty(filename))
             throw new SystemException(HttpCodeEnum.NO_FILENAME_ERROR);
         String[] split = filename.split("\\.");
         return "." + split[split.length - 1];

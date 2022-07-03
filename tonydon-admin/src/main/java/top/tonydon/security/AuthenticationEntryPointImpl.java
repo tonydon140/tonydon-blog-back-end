@@ -3,7 +3,7 @@ package top.tonydon.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.enums.HttpCodeEnum;
-import top.tonydon.utils.WebUtils;
+import top.tonydon.util.WebUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;

@@ -1,35 +1,32 @@
 package top.tonydon.constant;
 
-public class SystemConstants {
-    /**
-     * 文章草稿
-     */
+/**
+ * 实体常量
+ */
+public class EntityConstants {
+    /*************************************************
+     *
+     * Article 文章
+     *
+     *************************************************/
+    // 文章草稿
     public static final String ARTICLE_STATUS_DRAFT = "0";
-
-    /**
-     * 已发布文章
-     */
+    // 文章已发布
     public static final String ARTICLE_STATUS_PUBLISH = "1";
 
-    /**
-     * 分类正常
-     */
 
-
-    /**
-     * 友链审核通过
-     */
+    /*************************************************
+     *
+     * FriendLink 友链
+     *
+     *************************************************/
+    // 友链审核通过
     public static final String LINK_STATUS_NORMAL = "1";
-
-    /**
-     * 友链审核未通过
-     */
+    // 友链审核未通过
     public static final String LINK_STATUS_NOT_PASS = "0";
-
-    /**
-     * 友链未审核
-     */
+    // 友链未审核
     public static final String LINK_STATUS_UNREVIEWED = "2";
+
 
     /*************************************************
      *
