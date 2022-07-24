@@ -40,15 +40,15 @@ public class ArticleController {
         return articleService.getArticleDetail(id);
     }
 
-    /**
-     * 添加访问量
-     *
-     * @param id 文章 id
-     * @return 响应数据
-     */
-    @PutMapping("/updateViewCount/{id}")
-    public ResponseResult<Object> updateViewCount(@PathVariable Long id) {
-        return articleService.addViewCount(id);
-    }
+//    /**
+//     * 添加访问量
+//     *
+//     * @param id 文章 id
+//     * @return 响应数据
+//     */
+//    @PutMapping("/updateViewCount/{id}")
+//    public ResponseResult<Object> updateViewCount(@PathVariable Long id) {
+//        return articleService.addViewCount(id);
+//    }
 
 }

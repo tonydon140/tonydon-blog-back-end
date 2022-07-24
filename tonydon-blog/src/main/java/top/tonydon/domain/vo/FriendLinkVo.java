@@ -3,7 +3,7 @@ package top.tonydon.domain.vo;
 import lombok.Data;
 
 @Data
-public class FriendsLinkVo {
+public class FriendLinkVo {
     private Long id;            // id
     private String name;        // 名称
     private String logo;        // logo 图片地址

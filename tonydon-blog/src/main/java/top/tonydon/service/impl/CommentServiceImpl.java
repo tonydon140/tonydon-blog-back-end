@@ -58,6 +58,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return ResponseResult.success(new PageVo<>(voList, iPage.getTotal()));
     }
 
+    // todo 添加评论时删除对应的文章缓存
     @Override
     public ResponseResult<Object> addOne(Comment comment) {
         // 查询评论的文章

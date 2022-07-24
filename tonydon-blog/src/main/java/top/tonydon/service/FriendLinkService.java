@@ -2,7 +2,7 @@ package top.tonydon.service;
 
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.FriendLink;
-import top.tonydon.domain.vo.FriendsLinkVo;
+import top.tonydon.domain.vo.FriendLinkVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface FriendLinkService extends IService<FriendLink> {
 
-    ResponseResult<List<FriendsLinkVo>> getNormalLink();
+    ResponseResult<List<FriendLinkVo>> getNormalLink();
 
 
     ResponseResult<Object> saveApply(FriendLink friendLink);

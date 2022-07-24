@@ -1,29 +1,43 @@
 package top.tonydon;
 
-import top.tonydon.domain.entity.FriendLink;
-import top.tonydon.util.DateUtils;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.util.BeanUtils;
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.context.annotation.RequestScope;
+import top.tonydon.constant.BlogRedisConstants;
+import top.tonydon.domain.entity.Article;
+import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.util.MailUtils;
-import top.tonydon.util.RedisUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest
 public class BlogTest {
 
-    @Resource
-    private RedisUtils redisUtils;
 
     @Resource
-    private MailUtils mailUtils;
+    private StringRedisTemplate template;
+
+//    @Resource
+//    private RedisTemplate<String, Long> stringLongRedisTemplate;
+
+    @Resource
+    private RedisTemplate<String, Object> stringObjectRedisTemplate;
+
+    @Resource
+    private ArticleMapper articleMapper;
+
 
     @Test
-    public void test(){
-        FriendLink friendLink = new FriendLink();
-        friendLink.setAddress("http://www.tonydon.top");
-        friendLink.setName("Tonydon");
-        friendLink.setDescription("睡懒觉");
-        mailUtils.sendFriendLinkMail(friendLink);
+    void test(){
+        System.out.println(stringObjectRedisTemplate.opsForHash().get(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, "1"));
     }
+
 }

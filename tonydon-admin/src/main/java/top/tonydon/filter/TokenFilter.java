@@ -1,13 +1,14 @@
 package top.tonydon.filter;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import top.tonydon.constant.LoginConstants;
 import top.tonydon.constant.RedisConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.LoginUser;
 import top.tonydon.enums.HttpCodeEnum;
-import top.tonydon.util.RedisUtils;
 import top.tonydon.util.WebUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,12 +22,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
     @Resource
-    private RedisUtils redisUtils;
+    private StringRedisTemplate template;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -48,7 +50,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
         // 3. 根据 token 从 Redis 中查询用户信息
         String key = RedisConstants.LOGIN_PREFIX + token;
-        LoginUser userDetails = (LoginUser) redisUtils.getObject(key);
+        LoginUser userDetails = JSON.parseObject(template.opsForValue().get(key), LoginUser.class);
         // 用户不存在，登陆过期
         if(userDetails == null){
             // 提示重新登陆
@@ -57,7 +59,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
 
         // 4. 刷新 Redis
-        redisUtils.expire(key, RedisConstants.LOGIN_TTL);
+        template.expire(key, RedisConstants.LOGIN_TTL, TimeUnit.MINUTES);
 
         // 5. 存入 context
         Authentication authentication =

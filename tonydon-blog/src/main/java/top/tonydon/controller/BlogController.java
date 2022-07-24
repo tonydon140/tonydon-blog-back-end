@@ -1,14 +1,14 @@
 package top.tonydon.controller;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
+import top.tonydon.constant.BlogRedisConstants;
 import top.tonydon.constant.PexelsConstants;
-import top.tonydon.constant.RedisConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Hour;
 import top.tonydon.domain.entity.Image;
 import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.exception.SystemException;
 import top.tonydon.util.DateUtils;
-import top.tonydon.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +23,14 @@ import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
 public class BlogController {
 
     @Resource
-    private RedisUtils redisUtils;
+    private StringRedisTemplate template;
 
     private String API_VALUE;
 
@@ -37,15 +38,15 @@ public class BlogController {
     public ResponseResult<Object> getPexelsImage() {
         // 1. 获取当前小时的 key
         Hour hour = DateUtils.getHour();
-        String nowKey = RedisConstants.PEXELS_IMAGE_PREFIX + hour.getNow();
+        String nowKey = BlogRedisConstants.PEXELS_IMAGE_PREFIX + hour.getNow();
 
         // 2. 从 redis 中获取，如果存在直接返回
-        String url = redisUtils.getValue(nowKey);
+        String url = template.opsForValue().get(nowKey);
         if (url != null) return ResponseResult.success(url);
 
         // 3. redis 中不存在，查找上一个小时的图片
-        String lastKey = RedisConstants.PEXELS_IMAGE_PREFIX + hour.getLast();
-        url = redisUtils.getValue(lastKey);
+        String lastKey = BlogRedisConstants.PEXELS_IMAGE_PREFIX + hour.getLast();
+        url = template.opsForValue().get(lastKey);
 
         // 4. 使用新的线程记录当前小时的图片
         new Thread(()->requestImage(nowKey)).start();
@@ -80,13 +81,7 @@ public class BlogController {
         String imageUrl = image.getPhotos().get(0).getSrc().getOriginal() + PexelsConstants.URL_SUFFIX;
 
         // 4. 存入 redis 中
-        redisUtils.setValue(key, imageUrl, RedisConstants.PEXELS_IMAGE_TTL);
+        template.opsForValue().set(key, imageUrl, BlogRedisConstants.PEXELS_IMAGE_TTL, TimeUnit.MINUTES);
     }
-
-//    @RequestMapping("/test/error")
-//    public void testError(){
-//        log.error("aaaaa");
-//        int i = 10/0;
-//    }
 
 }

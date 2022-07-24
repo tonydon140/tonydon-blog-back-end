@@ -23,11 +23,4 @@ public interface ArticleService extends IService<Article> {
     // 获取文章详情
     ResponseResult<ArticleDetailVo>  getArticleDetail(Long id);
 
-
-    /**
-     * 添加访问量
-     * @param id 文章id
-     * @return 响应数据
-     */
-    ResponseResult<Object> addViewCount(Long id);
 }
