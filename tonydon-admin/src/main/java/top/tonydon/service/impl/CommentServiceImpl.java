@@ -4,9 +4,9 @@ import top.tonydon.domain.vo.CommentVo;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Comment;
 import top.tonydon.domain.vo.PageVo;
-import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.mapper.CommentMapper;
 import top.tonydon.service.CommentService;
+import top.tonydon.util.AdminCache;
 import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,31 +21,27 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
+
     @Resource
-    private ArticleMapper articleMapper;
+    private AdminCache adminCache;
 
     @Override
-    public ResponseResult<PageVo<CommentVo>> getCommentPage(Integer pageNum, Integer pageSize) {
+    public ResponseResult<PageVo<CommentVo>> findPage(Integer pageNum, Integer pageSize) {
         // 分页查询
         IPage<Comment> iPage = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByDesc(Comment::getCreateTime);
-        page(iPage, wrapper);
-        List<Comment> commentList = iPage.getRecords();
+        List<Comment> commentList = page(iPage).getRecords();
+        List<CommentVo> voList = BeanCopyUtils.copyBeanList(commentList, CommentVo.class);
 
         // 填充数据
-        List<Comment> list = commentList.stream()
-                .peek(comment -> {
+        voList = voList.stream()
+                .peek(vo -> {
                     // 填充回复评论昵称
-                    if (comment.getReplyId() != -1)
-                        comment.setReplyNickname(getById(comment.getReplyId()).getNickname());
+                    if (vo.getReplyId() != -1)
+                        vo.setReplyNickname(adminCache.getComment(vo.getReplyId()).getNickname());
                     // 填充回复文章标题
-                    comment.setArticleTitle(articleMapper.selectById(comment.getArticleId()).getTitle());
+                    vo.setArticleTitle(adminCache.getArticle(vo.getArticleId()).getTitle());
                 })
                 .collect(Collectors.toList());
-
-        // Bean 拷贝
-        List<CommentVo> voList = BeanCopyUtils.copyBeanList(list, CommentVo.class);
 
         return ResponseResult.success(new PageVo<>(voList, iPage.getTotal()));
     }
@@ -57,7 +53,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
 
-    private void remove(Long id){
+    private void remove(Long id) {
         // 查询子评论
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Comment::getReplyId, id);

@@ -24,6 +24,10 @@ public class CacheClient {
         template.opsForValue().set(key, JSON.toJSONString(value), time, unit);
     }
 
+    public void delete(String key){
+        template.delete(key);
+    }
+
     // 设置逻辑过期时间
     public void setWithLogicalExpire(String key, Object value, Long time, TimeUnit unit) {
         RedisData data = new RedisData();

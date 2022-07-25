@@ -24,15 +24,14 @@ public class MailUtils {
     /**
      * 发送评论邮件通知
      *
-     * @param comment 评论
      */
-    public void sendCommentMail(Comment comment) {
-        String subject = "[TonyDon博客]：您有一条新的评论，在《" + comment.getArticleTitle() + "》中";
-        String content = "文章标题：《" + comment.getArticleTitle() + "》\n" +
-                "评论内容：" + comment.getContent() + "\n" +
-                "点击链接查看：http://tonydon.top/article/" + comment.getArticleId();
+    public void sendCommentMail(String content, String aTitle, Long aid) {
+        String subject = "[TonyDon博客]：您有一条新的评论，在《" + aTitle + "》中";
+        String details = "文章标题：《" + aTitle + "》\n" +
+                "评论内容：" + content + "\n" +
+                "点击链接查看：http://tonydon.top/article/" + aid;
 
-        sendSimpleMail(MailConstants.adminMail, subject, content);
+        sendSimpleMail(MailConstants.adminMail, subject, details);
     }
 
     /**

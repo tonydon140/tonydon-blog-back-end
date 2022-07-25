@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -21,6 +22,15 @@ public class ObsConfig {
         Yaml yaml = new Yaml();
         InputStream stream = getClass().getClassLoader().getResourceAsStream("obs.yml");
         Map<String, String> map = yaml.load(stream);
+
+        try {
+            if (stream != null) {
+                stream.close();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return new ObsClient(map.get("ak"), map.get("sk"), ObsConstants.END_POINT);
     }
 }

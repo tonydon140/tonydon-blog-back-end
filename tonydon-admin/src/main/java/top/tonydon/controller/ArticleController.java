@@ -4,6 +4,7 @@ import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Article;
 import top.tonydon.domain.vo.ArticleEditVo;
 import top.tonydon.domain.vo.ArticleListVo;
+import top.tonydon.domain.vo.PageVo;
 import top.tonydon.service.ArticleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,17 +43,13 @@ public class ArticleController {
         if (article.getId() == null)
             return ResponseResult.success(articleService.save(article));
         else
-            return  ResponseResult.success(articleService.updateById(article));
+            return ResponseResult.success(articleService.updateById(article));
     }
 
-    /**
-     * 获取文章列表
-     *
-     * @return 文章集合
-     */
-    @GetMapping
-    public ResponseResult<List<ArticleListVo>> getArticleList() {
-        return articleService.getArticleList();
+
+    @GetMapping("/{pageNum}/{pageSize}")
+    public ResponseResult<PageVo<ArticleListVo>> findPage(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        return articleService.findPage(pageNum, pageSize);
     }
 
     /**
@@ -62,8 +59,8 @@ public class ArticleController {
      * @return 文章编辑视图
      */
     @GetMapping("/{id}")
-    public ResponseResult<ArticleEditVo> getArticleDetail(@PathVariable Long id) {
-        return articleService.getArticleDetailById(id);
+    public ResponseResult<ArticleEditVo> find(@PathVariable Long id) {
+        return articleService.findById(id);
     }
 
     /**
@@ -82,7 +79,6 @@ public class ArticleController {
      */
     @DeleteMapping("/{id}")
     public ResponseResult<Object> remove(@PathVariable Long id) {
-        articleService.removeById(id);
-        return ResponseResult.success();
+        return articleService.remove(id);
     }
 }

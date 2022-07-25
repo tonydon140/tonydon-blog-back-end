@@ -15,7 +15,7 @@ public interface CommentService extends IService<Comment> {
      * @param pageSize 页面大小
      * @return PageVo
      */
-    ResponseResult<PageVo<CommentVo>> getCommentPage(Integer pageNum, Integer pageSize);
+    ResponseResult<PageVo<CommentVo>> findPage(Integer pageNum, Integer pageSize);
 
     /**
      * 根据 id 删除评论，如果评论是父评论，会同时删除子评论

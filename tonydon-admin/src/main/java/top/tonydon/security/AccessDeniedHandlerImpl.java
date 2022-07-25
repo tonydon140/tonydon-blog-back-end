@@ -1,5 +1,6 @@
 package top.tonydon.security;
 
+import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.enums.HttpCodeEnum;
@@ -19,9 +20,8 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
-        ObjectMapper mapper = new ObjectMapper();
         accessDeniedException.printStackTrace();
         ResponseResult<Object> result = ResponseResult.error(HttpCodeEnum.NO_OPERATOR_AUTH);
-        WebUtils.renderString(response, mapper.writeValueAsString(result));
+        WebUtils.renderString(response, JSON.toJSONString(result));
     }
 }

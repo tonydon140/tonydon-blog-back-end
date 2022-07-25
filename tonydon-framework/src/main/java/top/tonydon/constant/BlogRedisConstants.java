@@ -32,4 +32,9 @@ public class BlogRedisConstants {
 
     // 文章访问量缓存
     public static final String CACHE_ARTICLE_VIEW_COUNT_KEY = "blog:article:view_count:";
+
+    // 评论缓存
+    public static final String CACHE_COMMENT_KEY = "blog:comment:";
+    public static final long CACHE_COMMENT_TTL = 24 * 60L;
+
 }

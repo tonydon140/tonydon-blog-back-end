@@ -1,5 +1,6 @@
 package top.tonydon.security;
 
+import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.enums.HttpCodeEnum;
@@ -32,10 +33,9 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
             result = ResponseResult.error(HttpCodeEnum.NEED_LOGIN);
         }
         // 其他异常情况
-        else{
+        else {
             result = ResponseResult.error(HttpCodeEnum.SYSTEM_ERROR.getCode(), "认证或授权失败");
         }
-        ObjectMapper mapper = new ObjectMapper();
-        WebUtils.renderString(response, mapper.writeValueAsString(result));
+        WebUtils.renderString(response, JSON.toJSONString(result));
     }
 }

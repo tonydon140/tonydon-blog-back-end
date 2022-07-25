@@ -1,15 +1,8 @@
 package top.tonydon.domain.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 
@@ -20,8 +13,6 @@ import lombok.experimental.Accessors;
  * @since 2022-03-16 13:34:42
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @TableName("td_article")
 @Accessors(chain = true)    // 设置 setter 返回当前对象本身
 public class Article {
@@ -45,19 +36,19 @@ public class Article {
 
     private String deleted;    // 删除标志（0代表未删除，1代表已删除）
 
-    // 分类名称
-    @TableField(exist = false)
-    private String categoryName;
-
-    // 更新人名称
-    @TableField(exist = false)
-    private String updateName;
-
-    // 发布人名称
-    @TableField(exist = false)
-    private String publishName;
-
-    @TableField(exist = false)
-    private Long commentCount;
+//    // 分类名称
+//    @TableField(exist = false)
+//    private String categoryName;
+//
+//    // 更新人名称
+//    @TableField(exist = false)
+//    private String updateName;
+//
+//    // 发布人名称
+//    @TableField(exist = false)
+//    private String publishName;
+//
+//    @TableField(exist = false)
+//    private Long commentCount;
 }
 

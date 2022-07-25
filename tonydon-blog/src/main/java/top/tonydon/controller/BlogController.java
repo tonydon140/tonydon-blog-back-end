@@ -20,6 +20,7 @@ import org.yaml.snakeyaml.Yaml;
 
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Random;
@@ -61,7 +62,16 @@ public class BlogController {
             Yaml yaml = new Yaml();
             InputStream stream = getClass().getClassLoader().getResourceAsStream("pexels.yml");
             Map<String, String> map = yaml.load(stream);
+
             API_VALUE = map.get("value");
+
+            // 关闭流
+            try {
+                if(stream != null)
+                    stream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // 1. 封装请求头

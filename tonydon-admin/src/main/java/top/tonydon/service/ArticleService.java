@@ -5,6 +5,7 @@ import top.tonydon.domain.entity.Article;
 import top.tonydon.domain.vo.ArticleEditVo;
 import top.tonydon.domain.vo.ArticleListVo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.tonydon.domain.vo.PageVo;
 
 import java.util.List;
 
@@ -24,7 +25,9 @@ public interface ArticleService extends IService<Article> {
      */
     ResponseResult<Object> updateArticle(Article article);
 
-    ResponseResult<List<ArticleListVo>> getArticleList();
+    ResponseResult<Object> remove(Long id);
 
-    ResponseResult<ArticleEditVo> getArticleDetailById(Long id);
+    ResponseResult<PageVo<ArticleListVo>> findPage(Integer pageNum, Integer pageSize);
+
+    ResponseResult<ArticleEditVo> findById(Long id);
 }

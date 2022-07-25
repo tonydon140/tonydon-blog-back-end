@@ -1,14 +1,11 @@
 package top.tonydon.domain.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -18,8 +15,6 @@ import lombok.NoArgsConstructor;
  * @since 2022-03-20 09:17:58
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @TableName("td_friend_link")
 public class FriendLink {
     @TableId(type = IdType.AUTO)

@@ -11,11 +11,12 @@ public class ArticleListVo {
     private String summary;         // 文章摘要
 
     private Long categoryId;        // 所属分类id
-    private String categoryName;    // 分类名
     private String thumbnail;       // 缩略图
     private Long viewCount;         // 访问量
-    private Long commentCount;      // 评论数量
 
-    private LocalDateTime publishTime;       // 创建时间
-    private LocalDateTime updateTime;        // 更新时间
+    private LocalDateTime publishTime;  // 发布时间
+    private LocalDateTime updateTime;   // 更新时间
+
+    private String categoryName;    // 分类名称
+    private Long commentCount;      // 评论数量
 }

@@ -20,9 +20,8 @@ public class CommentController {
      * pageSize   页面大小
      */
     @GetMapping("/{pageNum}/{pageSize}")
-    public ResponseResult<PageVo<CommentVo>> getCommentPage(@PathVariable Integer pageNum,
-                                                            @PathVariable Integer pageSize){
-        return commentService.getCommentPage(pageNum, pageSize);
+    public ResponseResult<PageVo<CommentVo>> findPage(@PathVariable Integer pageNum, @PathVariable Integer pageSize){
+        return commentService.findPage(pageNum, pageSize);
     }
 
     @DeleteMapping("/{id}")

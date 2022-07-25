@@ -4,13 +4,15 @@ import top.tonydon.domain.vo.CategoryVo;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.tonydon.domain.vo.PageVo;
 
 import java.util.List;
 
 public interface CategoryService extends IService<Category> {
-    ResponseResult<List<CategoryVo>> getAll();
 
-    ResponseResult<Object> removeCategory(Long id);
+    ResponseResult<PageVo<CategoryVo>> findPage(Integer pageNum, Integer pageSize);
 
-    ResponseResult<Object> confirmRemoveCategory(Long id);
+    ResponseResult<Object> remove(Long id);
+
+    ResponseResult<Object> confirmRemove(Long id);
 }

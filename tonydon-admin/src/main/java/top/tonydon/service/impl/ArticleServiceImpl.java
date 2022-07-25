@@ -1,17 +1,21 @@
 package top.tonydon.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import top.tonydon.constant.AdminRedisConstants;
+import top.tonydon.constant.BlogRedisConstants;
 import top.tonydon.domain.entity.Category;
 import top.tonydon.domain.entity.User;
 import top.tonydon.domain.vo.ArticleEditVo;
 import top.tonydon.domain.vo.ArticleListVo;
-import top.tonydon.mapper.UserMapper;
+import top.tonydon.domain.vo.PageVo;
 import top.tonydon.service.ArticleService;
 import top.tonydon.constant.EntityConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Article;
 import top.tonydon.exception.NoIdException;
 import top.tonydon.mapper.ArticleMapper;
-import top.tonydon.mapper.CategoryMapper;
+import top.tonydon.util.AdminCache;
 import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -24,12 +28,7 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     @Resource
-    private CategoryMapper categoryMapper;
-
-    @Resource
-    private UserMapper userMapper;
-
-    // todo 设置文章摘要
+    private AdminCache adminCache;
 
     @Override
     public ResponseResult<Object> publishNew(Article article) {
@@ -46,6 +45,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 保存文章
         save(article);
+        // 删除分类缓存
+        adminCache.delete(BlogRedisConstants.CACHE_CATEGORY_LIST_KEY);
         return ResponseResult.success();
     }
 
@@ -64,70 +65,104 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 更新文章
         updateById(article);
+        // 删除分类缓存
+        adminCache.delete(BlogRedisConstants.CACHE_CATEGORY_LIST_KEY);
         return ResponseResult.success();
     }
 
 
-
     @Override
     public ResponseResult<Object> updateArticle(Article article) {
-        // 更新摘要
+        // 1. 更新摘要
         String content = article.getContent();
         if (content.length() > 160)
             article.setSummary(content.substring(0, 160));
         else
             article.setSummary(content);
 
-        // 更新文章
+        // 2. 更新文章
         updateById(article);
+
+        // 3. 删除缓存
+        adminCache.delete(AdminRedisConstants.CACHE_ARTICLE_KEY + article.getId());
+        adminCache.delete(BlogRedisConstants.CACHE_ARTICLE_KEY + article.getId());
+
         return ResponseResult.success();
     }
 
     @Override
-    public ResponseResult<List<ArticleListVo>> getArticleList() {
-        // 1. 查询所有的文章
-        List<Article> articleList = list();
+    public ResponseResult<Object> remove(Long id) {
+        // 1. 删除文章
+        removeById(id);
 
-        // 2. 对文章进行处理
-        articleList = articleList.stream().peek(this::paddingData).collect(Collectors.toList());
+        // 2. 删除缓存
+        adminCache.delete(AdminRedisConstants.CACHE_ARTICLE_KEY + id);
+        adminCache.delete(BlogRedisConstants.CACHE_ARTICLE_KEY + id);
 
-        // 3. 封装为 vo 对象并返回
-        List<ArticleListVo> voList = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
-        return ResponseResult.success(voList);
+        // 3. 返回
+        return ResponseResult.success();
     }
 
     @Override
-    public ResponseResult<ArticleEditVo> getArticleDetailById(Long id) {
-        Article article = getById(id);
-        if (article == null) throw new NoIdException();
+    public ResponseResult<PageVo<ArticleListVo>> findPage(Integer pageNum, Integer pageSize) {
+        // 1. 分页查询
+        IPage<Article> articleIPage = new Page<>(pageNum, pageSize);
+        List<Article> articleList = page(articleIPage).getRecords();
+        List<ArticleListVo> voList = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
 
-        // 填充数据
-        paddingData(article);
+        // 2. 填充数据
+        voList = voList.stream().peek(this::paddingData).collect(Collectors.toList());
 
-        // 封装 vo 对象并返回
+        // 3. 返回数据
+        return ResponseResult.success(new PageVo<>(voList, articleIPage.getTotal()));
+    }
+
+    @Override
+    public ResponseResult<ArticleEditVo> findById(Long id) {
+        // 1. 从缓存中获取文章
+        Article article = adminCache.getArticle(id);
+        if (article == null)
+            throw new NoIdException();
         ArticleEditVo vo = BeanCopyUtils.copyBean(article, ArticleEditVo.class);
+
+        // 2. 填充数据
+        // 设置创建人昵称
+        if (vo.getPublishBy() != null) {
+            User user = adminCache.getUser(vo.getPublishBy());
+            vo.setPublishName(user != null ? user.getNickname() : "用户不存在");
+        }
+        // 设置更新人昵称
+        if (vo.getUpdateBy() != null) {
+            User user = adminCache.getUser(vo.getUpdateBy());
+            vo.setUpdateName(user != null ? user.getNickname() : "用户不存在");
+        }
+
+        // 3. 返回
         return ResponseResult.success(vo);
     }
 
     /**
      * 填充数据
      *
-     * @param article 文章
+     * @param vo 文章
      */
-    private void paddingData(Article article) {
+    private void paddingData(ArticleListVo vo) {
         // 设置分类名称
-        Category category = categoryMapper.selectById(article.getCategoryId());
-        article.setCategoryName(category != null ? category.getName() : "分类不存在");
+        Category category = adminCache.getCategory(vo.getCategoryId());
+        vo.setCategoryName(category != null ? category.getName() : "分类不存在");
+
         // 设置创建人昵称
-        if (article.getPublishBy() != null) {
-            User user = userMapper.selectById(article.getPublishBy());
-            article.setPublishName(user != null ? user.getNickname() : "用户不存在");
+        if (vo.getPublishBy() != null) {
+            User user = adminCache.getUser(vo.getPublishBy());
+            vo.setPublishName(user != null ? user.getNickname() : "用户不存在");
         }
+
         // 设置更新人昵称
-        if (article.getUpdateBy() != null) {
-            User user = userMapper.selectById(article.getUpdateBy());
-            article.setUpdateName(user != null ? user.getNickname() : "用户不存在");
+        if (vo.getUpdateBy() != null) {
+            User user = adminCache.getUser(vo.getUpdateBy());
+            vo.setUpdateName(user != null ? user.getNickname() : "用户不存在");
         }
     }
+
 
 }

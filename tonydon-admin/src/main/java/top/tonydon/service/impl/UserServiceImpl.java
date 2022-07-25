@@ -65,13 +65,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // 3. 进行删除用户
         removeById(id);
-        // todo sql 优化
-//        boolean update = lambdaUpdate().eq(User::getId, id).set(User::getDelFlag, SystemConstants.DEL_DELETED).update();
-//        if(update){
-//            return ResponseResult.success();
-//        }else{
-//            return ResponseResult.error(HttpCodeEnum.NO_ID_ERROR);
-//        }
         return ResponseResult.success();
     }
 }

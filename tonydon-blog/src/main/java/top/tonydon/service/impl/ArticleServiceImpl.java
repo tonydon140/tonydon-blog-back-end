@@ -6,14 +6,9 @@ import top.tonydon.constant.EntityConstants;
 import top.tonydon.domain.ResponseResult;
 import top.tonydon.domain.entity.Article;
 import top.tonydon.domain.entity.Category;
-import top.tonydon.domain.entity.Comment;
-import top.tonydon.domain.vo.ArticleDetailVo;
-import top.tonydon.domain.vo.ArticleListVo;
-import top.tonydon.domain.vo.HotArticleVo;
-import top.tonydon.domain.vo.PageVo;
+import top.tonydon.domain.vo.*;
 import top.tonydon.enums.HttpCodeEnum;
 import top.tonydon.mapper.ArticleMapper;
-import top.tonydon.mapper.CommentMapper;
 import top.tonydon.service.ArticleService;
 import top.tonydon.util.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -34,9 +29,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Resource
     private BlogCache blogCache;
-
-    @Resource
-    private CommentMapper commentMapper;
 
     // 查询热门文章
     @Override
@@ -60,7 +52,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }, BlogRedisConstants.CACHE_HOT_ARTICLE_TTL, TimeUnit.MINUTES);
 
         // 2. 从缓存中查询访问量
-        voList.forEach(hotArticleVo -> hotArticleVo.setViewCount(blogCache.getArticleViewCount(hotArticleVo.getId())));
+        voList.forEach(hot -> hot.setViewCount(blogCache.getArticleViewCount(hot.getId(), hot.getViewCount())));
 
         //3. 返回结果
         return ResponseResult.success(voList);
@@ -80,23 +72,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 分页查询
         IPage<Article> iPage = new Page<>(pageNum, pageSize);
         page(iPage, wrapper);
-        // 获取文章列名
         List<Article> articleList = iPage.getRecords();
-        // 查询 categoryName
-        // stream流处理
-        articleList = articleList.stream()
-                .peek(article -> {
-                    // 从缓存中查询分类名称
-                    Category category = blogCache.getCategory(article.getCategoryId());
-                    article.setCategoryName(category != null ? category.getName() : "分类不存在");
-                    // 从缓存查询评论总数
-                    article.setCommentCount(blogCache.getArticleCommentCount(article.getId()));
-                }).collect(Collectors.toList());
-        // 封装数据
         List<ArticleListVo> voList = BeanCopyUtils.copyBeanList(articleList, ArticleListVo.class);
 
-        // 2. 从缓存中查询访问量
-        voList.forEach(hotArticleVo -> hotArticleVo.setViewCount(blogCache.getArticleViewCount(hotArticleVo.getId())));
+        // 填充数据：分类名称、评论总数、访问量
+        voList = voList.stream()
+                .peek(vo -> {
+                    // 从缓存中查询分类名称
+                    Category category = blogCache.getCategory(vo.getCategoryId());
+                    vo.setCategoryName(category != null ? category.getName() : "分类不存在");
+                    // 从缓存查询评论总数
+                    vo.setCommentCount(blogCache.getArticleCommentCount(vo.getId()));
+                    // 从缓存中查询访问量
+                    vo.setViewCount(blogCache.getArticleViewCount(vo.getId(), vo.getViewCount()));
+                }).collect(Collectors.toList());
 
         // 封装查询结果，并返回
         return ResponseResult.success(new PageVo<>(voList, iPage.getTotal()));
@@ -104,39 +93,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     // 查询文章详情
     @Override
-    public ResponseResult<ArticleDetailVo> getArticleDetail(Long id) {
+    public ResponseResult<ArticleVo> getArticleDetail(Long id) {
         // 1. 从缓存中获取文章
-        ArticleDetailVo articleDetailVo = blogCache.getWithPenetration(BlogRedisConstants.CACHE_ARTICLE_KEY, id,
-                ArticleDetailVo.class, articleId -> {
-                    // 1. 从数据库中查询文章
-                    Article article = getById(articleId);
+        ArticleVo articleVo = blogCache.getArticleVo(id);
 
-                    // 2. 查询数据不存在，返回 null
-                    if (article == null)
-                        return null;
-
-                    // 3. 封装返回数据
-                    ArticleDetailVo vo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
-                    // 3.1 从缓存中查询分类，设置分类名称
-                    Category category = blogCache.getCategory(vo.getCategoryId());
-                    if (category != null) {
-                        vo.setCategoryName(category.getName());
-                    }
-                    // 3.2 从数据库中查询评论总数
-                    LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-                    queryWrapper.eq(Comment::getArticleId, article.getId());
-                    vo.setCommentCount(commentMapper.selectCount(queryWrapper));
-                    return vo;
-                }, BlogRedisConstants.CACHE_ARTICLE_TTL, TimeUnit.MINUTES);
-
-        if (articleDetailVo == null)
+        if (articleVo == null)
             return ResponseResult.error(HttpCodeEnum.ARTICLE_NOT_EXIST);
 
         // 2. 从缓存中查询访问量并加一
-        articleDetailVo.setViewCount(blogCache.incrementViewCount(articleDetailVo.getId()));
+        articleVo.setViewCount(blogCache.incrementViewCount(articleVo.getId(), articleVo.getViewCount()));
 
         // 3. 返回数据
-        return ResponseResult.success(articleDetailVo);
+        return ResponseResult.success(articleVo);
     }
 }
 
