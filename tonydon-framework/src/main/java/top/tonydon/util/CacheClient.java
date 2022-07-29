@@ -1,4 +1,4 @@
-package top.tonydon.util.cache;
+package top.tonydon.util;
 
 import com.alibaba.fastjson2.JSON;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,18 +14,18 @@ import java.util.function.Function;
 
 public class CacheClient {
 
-    private final StringRedisTemplate template;
+    protected final StringRedisTemplate stringRedisTemplate;
 
-    public CacheClient(StringRedisTemplate template) {
-        this.template = template;
+    public CacheClient(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     public void set(String key, Object value, Long time, TimeUnit unit) {
-        template.opsForValue().set(key, JSON.toJSONString(value), time, unit);
+        stringRedisTemplate.opsForValue().set(key, JSON.toJSONString(value), time, unit);
     }
 
     public void delete(String key){
-        template.delete(key);
+        stringRedisTemplate.delete(key);
     }
 
     // 设置逻辑过期时间
@@ -33,7 +33,7 @@ public class CacheClient {
         RedisData data = new RedisData();
         data.setData(value);
         data.setExpireTime(LocalDateTime.now().plusSeconds(unit.toSeconds(time)));
-        template.opsForValue().set(key, JSON.toJSONString(data));
+        stringRedisTemplate.opsForValue().set(key, JSON.toJSONString(data));
     }
 
     /**
@@ -50,7 +50,7 @@ public class CacheClient {
      */
     public <R> List<R> getWithPenetration(String key, Class<R> type, ListFunction<R> get, Long time, TimeUnit unit) {
         // 1. 从 Redis 查询缓存，如果Redis未命中则返回null
-        String json = template.opsForValue().get(key);
+        String json = stringRedisTemplate.opsForValue().get(key);
 
         // 2. 判断是否存在，如果存在直接返回
         if (StringUtils.hasText(json)) {
@@ -75,7 +75,7 @@ public class CacheClient {
     public <T, ID> T getWithPenetration(String keyPrefix, ID id, Class<T> type, Function<ID, T> queryById, Long time, TimeUnit unit) {
         // 1. 从 Redis 查询缓存，如果Redis未命中则返回null
         String key = keyPrefix + id;
-        String json = template.opsForValue().get(key);
+        String json = stringRedisTemplate.opsForValue().get(key);
 
         // 2. 判断是否存在，如果存在直接返回
         if (StringUtils.hasText(json)) {
@@ -93,7 +93,7 @@ public class CacheClient {
         // 5. 不存在，返回error
         if (t == null) {
             // 缓存空值
-            template.opsForValue().set(key, "", RedisConstants.CACHE_NULL_TTL, TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set(key, "", RedisConstants.CACHE_NULL_TTL, TimeUnit.MINUTES);
             return null;
         }
 

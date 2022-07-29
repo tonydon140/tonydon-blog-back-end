@@ -45,8 +45,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 保存文章
         save(article);
-        // 删除分类缓存
+
+        // 删除分类缓存、热门文章缓存
         adminCache.delete(BlogRedisConstants.CACHE_CATEGORY_LIST_KEY);
+        adminCache.delete(BlogRedisConstants.CACHE_HOT_ARTICLE_KEY);
+
         return ResponseResult.success();
     }
 
@@ -65,8 +68,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 更新文章
         updateById(article);
-        // 删除分类缓存
+        // 删除分类缓存、热门文章缓存
         adminCache.delete(BlogRedisConstants.CACHE_CATEGORY_LIST_KEY);
+        adminCache.delete(BlogRedisConstants.CACHE_HOT_ARTICLE_KEY);
+
         return ResponseResult.success();
     }
 

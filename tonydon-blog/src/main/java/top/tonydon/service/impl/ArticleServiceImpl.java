@@ -31,6 +31,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private BlogCache blogCache;
 
     // 查询热门文章
+    // 由于Redis缓存，热门文章列表的排序会出现不准确的现象，但不影响使用
     @Override
     public ResponseResult<List<HotArticleVo>> hotArticleList() {
         // 1. 从缓存中查询热门文章

@@ -11,7 +11,6 @@ import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.mapper.CategoryMapper;
 import top.tonydon.mapper.CommentMapper;
 import top.tonydon.mapper.UserMapper;
-import top.tonydon.util.cache.CacheClient;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;

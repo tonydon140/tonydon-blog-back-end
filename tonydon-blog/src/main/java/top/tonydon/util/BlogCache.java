@@ -1,7 +1,6 @@
 package top.tonydon.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import top.tonydon.constant.BlogRedisConstants;
@@ -12,7 +11,6 @@ import top.tonydon.domain.vo.ArticleVo;
 import top.tonydon.mapper.ArticleMapper;
 import top.tonydon.mapper.CategoryMapper;
 import top.tonydon.mapper.CommentMapper;
-import top.tonydon.util.cache.CacheClient;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -28,9 +26,6 @@ public class BlogCache extends CacheClient {
 
     @Resource
     private CommentMapper commentMapper;
-
-    @Resource
-    private RedisTemplate<String, Object> stringObjectRedisTemplate;
 
     public BlogCache(StringRedisTemplate template) {
         super(template);
@@ -105,32 +100,37 @@ public class BlogCache extends CacheClient {
 
     // 从缓存中查询文章访问量
     public Long getArticleViewCount(Long id, Long viewCountInDB) {
+        String idStr = id.toString();
         // 1. 从缓存中查询访问量
-        Long viewCount = (Long) stringObjectRedisTemplate.opsForHash()
-                .get(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, id.toString());
+        String viewCount = (String) stringRedisTemplate.opsForHash()
+                .get(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, idStr);
 
         // 2. 命中缓存，直接返回
         if (viewCount != null) {
-            return viewCount;
+            return Long.parseLong(viewCount);
         }
 
         // 3. 未命中缓存，根据数据库中的访问量 viewCountInDB 建立缓存并返回
-        stringObjectRedisTemplate.opsForHash()
-                .put(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, id.toString(), viewCountInDB);
+        stringRedisTemplate.opsForHash()
+                .increment(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, idStr, viewCountInDB);
         return viewCountInDB;
     }
 
     public Long incrementViewCount(Long id, Long viewCountInDB) {
-        // 1. 查询访问量
-        Long viewCount = getArticleViewCount(id, viewCountInDB);
-        if (viewCount == null) return null;
+        String idStr = id.toString();
+        // 1. 判断缓存是否存在
+        Boolean hasKey = stringRedisTemplate.opsForHash()
+                .hasKey(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, idStr);
 
-        // 2. 访问量加一
-        stringObjectRedisTemplate.opsForHash()
-                .put(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, id.toString(), viewCount + 1);
-
-        // 3. 返回加一后的访问量
-        return viewCount + 1;
+        if (hasKey) {
+            // 缓存存在，自增一并返回
+            return stringRedisTemplate.opsForHash()
+                    .increment(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, idStr, 1);
+        } else {
+            // 缓存不存在，自增 viewCountInDB + 1 建立缓存
+            return stringRedisTemplate.opsForHash()
+                    .increment(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, idStr, viewCountInDB + 1);
+        }
     }
 
 

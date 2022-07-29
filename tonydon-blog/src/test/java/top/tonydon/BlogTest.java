@@ -23,7 +23,7 @@ public class BlogTest {
 
 
     @Resource
-    private StringRedisTemplate template;
+    private StringRedisTemplate stringRedisTemplate;
 
 //    @Resource
 //    private RedisTemplate<String, Long> stringLongRedisTemplate;
@@ -36,8 +36,30 @@ public class BlogTest {
 
 
     @Test
-    void test(){
-        System.out.println(stringObjectRedisTemplate.opsForHash().get(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, "1"));
+    void test() {
+        // 获取 viewCount 字符串类型
+        String v = (String) stringRedisTemplate.opsForHash()
+                .get(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, "1");
+        // 解析为 Long 类型，进行加一
+        long viewCount = Long.parseLong(v) + 1;
+        // 存入 Redis 中
+        stringRedisTemplate.opsForHash()
+                .put(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, "1", Long.toString(viewCount));
     }
 
+    void testRedisTemplate() {
+        Long viewCount = (Long) stringObjectRedisTemplate.opsForHash().get(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, "1");
+        stringObjectRedisTemplate.opsForHash().put(BlogRedisConstants.CACHE_ARTICLE_VIEW_COUNT_KEY, "1", viewCount + 1);
+    }
+
+
+    @Test
+    void testStringRedisTemplate(){
+        String key = "test:incr";
+        Long increment = stringRedisTemplate.opsForHash().increment(key, "2", 10);
+        System.out.println(increment);
+//        String viewCount = (String) stringRedisTemplate.opsForHash().get(key, "1");
+
+//        System.out.println(viewCount);
+    }
 }
